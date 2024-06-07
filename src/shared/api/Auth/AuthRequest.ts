@@ -1,14 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
   GetLoadedStudentsPayload,
+  GetLoadedStudentsResponse,
   LoginPayload,
   LoginResponse,
   ProfilePayload,
   ProfileResponse,
   RegisterPayload,
   RegisterResponse,
-  StudentsListPayload,
-  StudentsListResponse,
+  StudentsFileUploadPayload,
+  StudentsFileUploadResponse,
 } from './AuthDataSource.ts'
 import { baseUrl } from '../static/authConfig.ts'
 
@@ -17,6 +18,16 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}api/auth/`,
     mode: 'no-cors',
+    prepareHeaders: headers => {
+      const token = localStorage.getItem('userToken')
+
+      if (token && !headers.has('Authorization')) {
+        headers.set('Authorization', `Bearer ${token!}`)
+      }
+      headers.set('Content-Type', 'application/json')
+
+      return headers
+    },
   }),
   endpoints: builder => ({
     Register: builder.mutation<RegisterResponse, RegisterPayload>({
@@ -36,14 +47,14 @@ export const authApi = createApi({
     GetProfile: builder.query<ProfileResponse, ProfilePayload>({
       query: () => `profile`,
     }),
-    LoadStudents: builder.mutation<StudentsListResponse, StudentsListPayload>({
+    LoadStudents: builder.mutation<StudentsFileUploadResponse, StudentsFileUploadPayload>({
       query: data => ({
         url: `students/table`,
         method: 'POST',
         body: data,
       }),
     }),
-    GetStudents: builder.query<StudentsListResponse, GetLoadedStudentsPayload>({
+    GetStudents: builder.query<GetLoadedStudentsResponse, GetLoadedStudentsPayload>({
       query: () => `students/table`,
     }),
   }),

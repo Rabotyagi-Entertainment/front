@@ -1,5 +1,12 @@
+import { Layout } from 'antd'
+import { Router } from './routes'
+
 const App = () => {
-  return <></>
+  return (
+    <Layout>
+      <Router />
+    </Layout>
+  )
 }
 
 export default App

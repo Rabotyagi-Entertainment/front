@@ -25,11 +25,11 @@ export interface ProfileResponse {
   roles: RolesEnum[]
 }
 
-export interface StudentsListPayload {
+export interface StudentsFileUploadPayload {
   file: File
 }
-export interface StudentsListResponse {}
+export interface StudentsFileUploadResponse {}
 
 export interface GetLoadedStudentsPayload {}
 type StudentsLists = User[]
-export interface StudentsListResponse extends StudentsLists {}
+export interface GetLoadedStudentsResponse extends StudentsLists {}

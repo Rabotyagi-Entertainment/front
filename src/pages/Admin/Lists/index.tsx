@@ -1,5 +1,13 @@
+import { Layout, List } from 'antd'
+
 const Lists = () => {
-  return <></>
+  return (
+    <>
+      <Layout>
+        <List>{}</List>
+      </Layout>
+    </>
+  )
 }
 
 export default Lists

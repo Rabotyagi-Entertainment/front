@@ -18,6 +18,16 @@ export const internshipAdminApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}/admin/internship/`,
     mode: 'no-cors',
+    prepareHeaders: headers => {
+      const token = localStorage.getItem('userToken')
+
+      if (token && !headers.has('Authorization')) {
+        headers.set('Authorization', `Bearer ${token!}`)
+      }
+      headers.set('Content-Type', 'application/json')
+
+      return headers
+    },
   }),
   endpoints: builder => ({
     CreateCompany: builder.mutation<CreateInternshipCompanyResponse, CreateInternshipCompanyPayload>({

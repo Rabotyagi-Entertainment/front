@@ -1,4 +1,4 @@
-export interface Comment {
+export interface CommentType {
   text: string
   author: string
 }

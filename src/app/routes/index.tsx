@@ -1,35 +1,33 @@
-import { Route, Routes } from 'react-router-dom'
-import { lazy } from 'react'
+import { Navigate, useRoutes } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { ProtectedRoutes } from './ProtectedRoutes'
 
-const Internship = lazy(() => import('../../pages/User/Internship'))
-const Diary = lazy(() => import('../../pages/User/Diary'))
 const Auth = lazy(() => import('../../pages/User/Auth'))
 const AdminAuth = lazy(() => import('../../pages/Admin/Auth'))
-const Students = lazy(() => import('../../pages/Admin/Lists'))
+const MainLayout = lazy(() => import('../../pages/Layout'))
+
+const createRoutes = (isAuth: boolean) => [
+  {
+    path: '/',
+    element: isAuth ? <MainLayout /> : <Navigate to={'/login'} />,
+    children: ProtectedRoutes,
+  },
+  {
+    path: '/login',
+    element: <Auth />,
+  },
+  {
+    path: '/admin/login',
+    element: <AdminAuth />,
+  },
+  {
+    path: '/*',
+    element: <Navigate to={'/internship'} />,
+  },
+]
 
 export const Router = () => {
-  return (
-    <Routes>
-      <Route
-        index
-        element={<Internship />}
-      />
-      <Route
-        path='/diary'
-        element={<Diary />}
-      />
-      <Route
-        path='/login'
-        element={<Auth />}
-      />
-      <Route
-        path='/admin/login'
-        element={<AdminAuth />}
-      />
-      <Route
-        path='/students'
-        element={<Students />}
-      />
-    </Routes>
-  )
+  const isAuth = localStorage.getItem('userToken')
+  const customRouter = useRoutes(createRoutes(!!isAuth))
+  return <Suspense fallback={<span>{'loading'}</span>}>{customRouter}</Suspense>
 }
