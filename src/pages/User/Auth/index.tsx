@@ -1,49 +1,86 @@
-import { Button, Form, FormProps, Input, Layout, Select, Typography } from 'antd'
+import { Button, Form, FormProps, Input, Layout, Select, Spin, Typography } from 'antd'
 import { useGetStudentsQuery, useRegisterMutation } from '../../../shared/api/Auth/AuthRequest.ts'
-import { RegisterPayload, GetLoadedStudentsResponse } from '../../../shared/api/Auth/AuthDataSource.ts'
-import { ReactNode } from 'react'
+import { GetLoadedStudentsResponse, RegisterPayload } from '../../../shared/api/Auth/AuthDataSource.ts'
+import { useNavigate } from 'react-router-dom'
 
-type FieldType = RegisterPayload
+type FieldType = Omit<RegisterPayload, 'telegramUserName'>
 
-const createOptions = (data: GetLoadedStudentsResponse): { value: string; label: ReactNode }[] => {
-  return data.map(({ fullName, group, telegramUserName }) => ({
-    value: telegramUserName,
-    label: `${fullName} - ${group}`,
-  }))
+const createOptions = (data: GetLoadedStudentsResponse): { value: string; label: string }[] => {
+  return data.map(item => {
+    return {
+      value: item.fullName ? item.fullName : item.id,
+      label: `${item.fullName} - ${item.group}`,
+    }
+  })
 }
 
 const { Title } = Typography
 const Auth = () => {
+  // // @ts-ignore
+  // const userName = window.Telegram.WebApp.initDataUnsafe.user.username
   const [authTrigger] = useRegisterMutation()
-  const { data } = useGetStudentsQuery({})
+  const navigate = useNavigate()
+  const { data, isFetching } = useGetStudentsQuery({})
 
   const onFinish = (values: FieldType) => {
-    authTrigger(values)
+    authTrigger({ telegramUserName: 'username', ...values }).then(response => {
+      if (response.error) {
+        alert(`Ошибка: ${response.error}`)
+      } else {
+        localStorage.setItem('userToken', response.data.token)
+        navigate('student/startup')
+      }
+    })
   }
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = errorInfo => {
     alert(`Ошибка: ${errorInfo}`)
   }
 
+  if (isFetching) {
+    return (
+      <div style={{ inset: 0, position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Spin size={'large'} />
+      </div>
+    )
+  }
+
+  const filterOption = (input: string, option?: { label: string; value: string }) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+
   return (
     <>
-      <Layout>
+      <Layout style={{ padding: '1rem' }}>
         <Title>{'Регистрация'}</Title>
         <Form
-          name='basic'
-          initialValues={{ remember: true }}
+          name='register'
+          initialValues={{ password: '', fullName: '', email: '' }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
           <Form.Item<FieldType>
-            label='Логин'
-            name='telegramUserName'
-            rules={[{ required: true, message: 'Введите логин!' }]}
+            label='Пользователь'
+            name='fullName'
+            rules={[{ required: true, message: 'Выберите себя!' }]}
           >
-            <Select
-              placeholder={'Выберите себя из списка'}
-              options={createOptions(data!)}
-            />
+            {data! ? (
+              <Select
+                showSearch
+                filterOption={filterOption}
+                placeholder={'Выберите себя из списка'}
+                options={createOptions(data!)}
+              />
+            ) : (
+              <Spin />
+            )}
+          </Form.Item>
+
+          <Form.Item<FieldType>
+            label='Email'
+            name='email'
+            rules={[{ required: true, message: 'Введите почту!', type: 'email' }]}
+          >
+            <Input />
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -51,7 +88,7 @@ const Auth = () => {
             name='password'
             rules={[{ required: true, message: 'Введите пароль!' }]}
           >
-            <Input.Password />
+            <Input.Password autoComplete={'off'} />
           </Form.Item>
 
           <Form.Item>

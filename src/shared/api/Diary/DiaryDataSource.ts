@@ -1,13 +1,19 @@
-import { DiaryType } from '../../types/diary/Diary.ts'
+import { UserDiary } from '../../types/diary/UserDiary.ts'
+import { DiaryTypeEnum } from '../../types/diary/DiaryTypeEnum.ts'
 
 export interface GetMyDiaryPayload {}
-type MyDiaryType = DiaryType[]
-export interface GetMyDiaryResponse extends MyDiaryType {}
+export type GetMyDiaryResponse = UserDiary[]
 
 export interface GetMyDiaryFilePayload {
   diaryId: string
 }
 export interface GetMyDiaryFileResponse {}
+
+export interface GetDiaryListPayload {
+  userId?: string
+  internshipId?: string
+}
+export type GetDiaryListResponse = UserDiary[]
 
 type GeneralInfoPayload = {
   orderNumber: string
@@ -23,7 +29,7 @@ export interface EditDiaryGeneralInformationResponse {}
 
 export interface CreateDiaryPayload {
   internshipId: string
-  diaryType: DiaryType
+  diaryType: DiaryTypeEnum
 }
 export interface CreateDiaryResponse {}
 

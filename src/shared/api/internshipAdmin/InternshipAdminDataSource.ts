@@ -1,6 +1,10 @@
 import { UserWithCompany } from '../../types/user/UserWithCompany.ts'
 import { Company } from '../../types/internship/Company.ts'
 
+export interface GetCompaniesPayload {}
+type Companies = Record<string, never>[]
+export interface GetCompaniesResponse extends Companies {}
+
 export interface CreateInternshipCompanyPayload {
   name: string
 }

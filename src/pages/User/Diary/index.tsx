@@ -1,28 +1,40 @@
-import { Collapse, CollapseProps, Layout, Typography } from 'antd'
-import { useGetMyDiariesQuery } from '../../../shared/api/Diary/DiaryRequest.ts'
-import { GetMyDiaryResponse } from '../../../shared/api/Diary/DiaryDataSource.ts'
+import { Collapse, CollapseProps, Empty, Flex, Layout, Spin, Typography } from 'antd'
+import { useGetDiariesListQuery } from '../../../shared/api/Diary/DiaryRequest.ts'
+import { useParams } from 'react-router-dom'
+import { GetDiaryListResponse } from '../../../shared/api/Diary/DiaryDataSource.ts'
 import { DiaryListItem } from '../../../entities/ui/Diary/DiaryListItem.tsx'
+import { CreateDiaryModal } from '../../../Features/diary/CreateDiaryModal'
 
 const { Title } = Typography
 
-const createPanels = (items: GetMyDiaryResponse): CollapseProps['items'] => {
-  return items.map(item => ({
+const createPanels = (data: GetDiaryListResponse): CollapseProps['items'] => {
+  return data.map(item => ({
     key: item.id,
-    label: <span>{item.workName}</span>,
+    label: <span>{`${item.companyName} - ${item.createdAt.split('T')[0]}`}</span>,
     children: <DiaryListItem item={item} />,
   }))
 }
 
-const Diary = () => {
-  const { data } = useGetMyDiariesQuery({})
+const DiaryStudent = () => {
+  const { id } = useParams()
+  const { data, isFetching } = useGetDiariesListQuery({ internshipId: id! })
+  if (isFetching) {
+    return <Spin />
+  }
   return (
     <>
       <Layout>
-        <Title>{'Дневники'}</Title>
-        <Collapse items={createPanels(data!)} />
+        <Flex
+          justify={'space-between'}
+          align={'center'}
+        >
+          <Title>{'Дневники'}</Title>
+          <CreateDiaryModal internshipId={id!} />
+        </Flex>
+        {data ? <Collapse items={createPanels(data!)} /> : <Empty description={'Пока нет дневников'} />}
       </Layout>
     </>
   )
 }
 
-export default Diary
+export default DiaryStudent

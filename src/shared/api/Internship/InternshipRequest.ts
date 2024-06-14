@@ -6,8 +6,14 @@ import {
   CreateCompanyResponse,
   DiaryProgressStatusPayload,
   DiaryProgressStatusResponse,
+  GetStudentInternshipPayload,
+  GetStudentInternshipProgressPayload,
+  GetStudentInternshipProgressResponse,
+  GetStudentInternshipResponse,
   InternshipProgressStatusPayload,
   InternshipProgressStatusResponse,
+  RemoveCompanyUserPayload,
+  RemoveCompanyUserResponse,
   SetCompanyStatusPayload,
   SetCompanyStatusResponse,
   UpdateInternshipProgressStatusPayload,
@@ -18,8 +24,7 @@ import { baseUrl } from '../static/authConfig.ts'
 export const internshipApi = createApi({
   reducerPath: 'internshipApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${baseUrl}/internship/`,
-    mode: 'no-cors',
+    baseUrl: `${baseUrl}internship/`,
     prepareHeaders: headers => {
       const token = localStorage.getItem('userToken')
 
@@ -39,6 +44,12 @@ export const internshipApi = createApi({
         body: payload,
       }),
     }),
+    RemoveCompany: builder.mutation<RemoveCompanyUserResponse, RemoveCompanyUserPayload>({
+      query: ({ companyId }) => ({
+        url: `company/${companyId}`,
+        method: 'DELETE',
+      }),
+    }),
     CreateCompany: builder.mutation<CreateCompanyResponse, CreateCompanyPayload>({
       query: ({ name }) => ({
         url: `company/create`,
@@ -48,9 +59,8 @@ export const internshipApi = createApi({
     }),
     ChangeStatus: builder.mutation<SetCompanyStatusResponse, SetCompanyStatusPayload>({
       query: ({ companyId, payload }) => ({
-        url: `company/${companyId}/status`,
+        url: `company/${companyId}/status?status=${payload}`,
         method: 'PUT',
-        body: payload,
       }),
     }),
     setNewStatus: builder.mutation<InternshipProgressStatusResponse, InternshipProgressStatusPayload>({
@@ -81,6 +91,15 @@ export const internshipApi = createApi({
         body: payload,
       }),
     }),
+    GetStudentInternshipProgress: builder.query<
+      GetStudentInternshipProgressResponse,
+      GetStudentInternshipProgressPayload
+    >({
+      query: () => `progress/student`,
+    }),
+    GetStudentInternships: builder.query<GetStudentInternshipResponse, GetStudentInternshipPayload>({
+      query: () => `internship/student`,
+    }),
   }),
 })
 
@@ -91,4 +110,8 @@ export const {
   useSetNewStatusMutation,
   useSetNewStatusDiaryMutation,
   useUpdateStatusInternshipMutation,
+  useGetStudentInternshipProgressQuery,
+  useLazyGetStudentInternshipProgressQuery,
+  useRemoveCompanyMutation,
+  useGetStudentInternshipsQuery,
 } = internshipApi

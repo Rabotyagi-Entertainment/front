@@ -18,7 +18,7 @@ const AdminAuth = () => {
 
   return (
     <>
-      <Layout>
+      <Layout style={{ padding: '1rem' }}>
         <Title>{'Админ панель'}</Title>
         <Form
           name='basic'

@@ -20,10 +20,10 @@ const createRoutes = (isAuth: boolean) => [
     path: '/admin/login',
     element: <AdminAuth />,
   },
-  {
-    path: '/*',
-    element: <Navigate to={'/internship'} />,
-  },
+  // {
+  //   path: '/*',
+  //   element: <Navigate to={'/'} />,
+  // },
 ]
 
 export const Router = () => {

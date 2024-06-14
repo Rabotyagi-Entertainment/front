@@ -3,6 +3,8 @@ import { baseUrl } from '../static/authConfig.ts'
 import {
   CreateInternshipCompanyPayload,
   CreateInternshipCompanyResponse,
+  GetCompaniesPayload,
+  GetCompaniesResponse,
   GetStudentsListSearchablePayload,
   GetStudentsListSearchableResponse,
   GetStudentsStatusesPayload,
@@ -16,8 +18,7 @@ import {
 export const internshipAdminApi = createApi({
   reducerPath: 'internshipAdminApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${baseUrl}/admin/internship/`,
-    mode: 'no-cors',
+    baseUrl: `${baseUrl}`,
     prepareHeaders: headers => {
       const token = localStorage.getItem('userToken')
 
@@ -30,33 +31,38 @@ export const internshipAdminApi = createApi({
     },
   }),
   endpoints: builder => ({
+    GetCompanies: builder.query<GetCompaniesResponse, GetCompaniesPayload>({
+      query: () => `admin/internship/company`,
+    }),
     CreateCompany: builder.mutation<CreateInternshipCompanyResponse, CreateInternshipCompanyPayload>({
       query: payload => ({
-        url: `company`,
+        url: `admin/internship/company`,
         method: 'POST',
         body: payload,
       }),
     }),
     GetStudentsParameters: builder.query<GetStudentsListSearchableResponse, GetStudentsListSearchablePayload>({
-      query: ({ search, company, group }) => `students?search=${search}&company=${company}&group=${group}`,
+      query: ({ search, company, group }) =>
+        `admin/internship/students?search=${search}&company=${company}&group=${group}`,
     }),
     ExportStudentTable: builder.query<GetStudentsTableResponse, GetStudentsTablePayload>({
-      query: () => `students/table`,
+      query: () => `admin/internship/students/table`,
     }),
     GetStudentsStatuses: builder.query<GetStudentsStatusesResponse, GetStudentsStatusesPayload>({
-      query: ({ userId }) => `students/${userId}`,
+      query: ({ userId }) => `admin/internship//${userId}`,
     }),
     Comment: builder.mutation<LeaveCommentProgressResponse, LeaveCommentProgressPayload>({
       query: ({ text, internshipProgressId }) => ({
-        url: `internship/${internshipProgressId}`,
+        url: `/internship/progress/${internshipProgressId}/status`,
         method: 'POST',
-        body: text,
+        body: { text },
       }),
     }),
   }),
 })
 
 export const {
+  useGetCompaniesQuery,
   useCreateCompanyMutation,
   useCommentMutation,
   useExportStudentTableQuery,

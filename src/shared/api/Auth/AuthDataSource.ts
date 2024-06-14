@@ -7,7 +7,9 @@ export interface RegisterPayload {
   password: string
   fullName: string
 }
-export interface RegisterResponse {}
+export interface RegisterResponse {
+  token: string
+}
 
 export interface LoginPayload {
   telegramUserName: string
@@ -22,7 +24,7 @@ export interface ProfileResponse {
   email: string
   telegramUserName: string
   joinedAt: string
-  roles: RolesEnum[]
+  roles: RolesEnum
 }
 
 export interface StudentsFileUploadPayload {
@@ -31,5 +33,4 @@ export interface StudentsFileUploadPayload {
 export interface StudentsFileUploadResponse {}
 
 export interface GetLoadedStudentsPayload {}
-type StudentsLists = User[]
-export interface GetLoadedStudentsResponse extends StudentsLists {}
+export type GetLoadedStudentsResponse = User[]

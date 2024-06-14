@@ -1,4 +1,6 @@
-import { StatusEnum } from '../../types/internship/Status.ts'
+import { PracticeDiary } from '../../../entities/types/practiceDiary.ts'
+import { CommentType } from '../../types/internship/Comment.ts'
+import { InternshipProgressEnum } from '../../types/internshipProgress/InternshipProgressEnum.ts'
 
 type AddCompany = {
   priority: number
@@ -11,6 +13,11 @@ export interface AddCompanyUserPayload {
 }
 export interface AddCompanyUserResponse {}
 
+export interface RemoveCompanyUserPayload {
+  companyId: string
+}
+export interface RemoveCompanyUserResponse {}
+
 export interface CreateCompanyPayload {
   name: string
 }
@@ -18,7 +25,7 @@ export interface CreateCompanyResponse {}
 
 export interface SetCompanyStatusPayload {
   companyId: string
-  payload: StatusEnum
+  payload: InternshipProgressEnum
 }
 export interface SetCompanyStatusResponse {}
 
@@ -43,3 +50,35 @@ export interface UpdateInternshipProgressStatusPayload {
   payload: InternshipProgressUpdate
 }
 export interface UpdateInternshipProgressStatusResponse {}
+
+export interface GetStudentInternshipProgressPayload {}
+type InternshipProgressResponse = {
+  id: string
+  priority: number
+  createdAt: string
+  company: {
+    id: string
+    name: 'string'
+    isPartner: boolean
+  }
+  practiceDiaries: PracticeDiary[]
+  startedAt: string
+  endedAt: string
+  progressStatus: InternshipProgressEnum
+  comments: CommentType[]
+}[]
+export interface GetStudentInternshipProgressResponse extends InternshipProgressResponse {}
+
+export interface GetStudentInternshipPayload {}
+type InternshipResponse = {
+  id: string
+  company: {
+    id: string
+    name: string
+    isPartner: boolean
+  }
+  practiceDiaries: PracticeDiary[]
+  startedAt: string
+  endedAt: null
+}[]
+export interface GetStudentInternshipResponse extends InternshipResponse {}

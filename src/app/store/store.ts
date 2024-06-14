@@ -7,10 +7,10 @@ import { diaryApi } from '../../shared/api/Diary/DiaryRequest.ts'
 
 export const store = configureStore({
   reducer: {
-    authApi: authApi.reducer,
-    internshipApi: internshipApi.reducer,
-    internshipAdminApi: internshipAdminApi.reducer,
-    diaryApi: diaryApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
+    [internshipApi.reducerPath]: internshipApi.reducer,
+    [internshipAdminApi.reducerPath]: internshipAdminApi.reducer,
+    [diaryApi.reducerPath]: diaryApi.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(

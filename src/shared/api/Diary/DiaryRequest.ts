@@ -7,10 +7,10 @@ import {
   EditDiaryAdditionalInformationResponse,
   EditDiaryGeneralInformationPayload,
   EditDiaryGeneralInformationResponse,
+  GetDiaryListPayload,
+  GetDiaryListResponse,
   GetMyDiaryFilePayload,
   GetMyDiaryFileResponse,
-  GetMyDiaryPayload,
-  GetMyDiaryResponse,
   LoadTaskReportPayload,
   LoadTaskReportResponse,
 } from './DiaryDataSource.ts'
@@ -18,8 +18,7 @@ import {
 export const diaryApi = createApi({
   reducerPath: 'diaryApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${baseUrl}/diary/`,
-    mode: 'no-cors',
+    baseUrl: `${baseUrl}diary/`,
     prepareHeaders: headers => {
       const token = localStorage.getItem('userToken')
 
@@ -32,8 +31,9 @@ export const diaryApi = createApi({
     },
   }),
   endpoints: builder => ({
-    GetMyDiaries: builder.query<GetMyDiaryResponse, GetMyDiaryPayload>({
-      query: () => 'list',
+    GetDiariesList: builder.query<GetDiaryListResponse, GetDiaryListPayload>({
+      query: ({ userId, internshipId }) =>
+        `list?${userId ? `userId=${userId}` : ''}&${internshipId ? `internshipId=${internshipId}` : ''}`,
     }),
     GetMyDiaryFile: builder.query<GetMyDiaryFileResponse, GetMyDiaryFilePayload>({
       query: ({ diaryId }) => `${diaryId}`,
@@ -74,7 +74,7 @@ export const {
   useCreatePracticeDiaryMutation,
   useEditAdditionalInfoMutation,
   useEditGeneralInfoMutation,
-  useGetMyDiariesQuery,
+  useGetDiariesListQuery,
   useGetMyDiaryFileQuery,
   useLoadReportMutation,
 } = diaryApi

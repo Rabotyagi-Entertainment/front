@@ -5,7 +5,9 @@ const MainLayout = () => {
   return (
     <div>
       <Navbar />
-      <Outlet />
+      <div style={{ padding: '1rem' }}>
+        <Outlet />
+      </div>
     </div>
   )
 }

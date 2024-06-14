@@ -1,10 +1,11 @@
-import { lazy, ReactNode } from 'react'
-
-const Internship = lazy(() => import('../../../pages/User/Internship'))
-const Diary = lazy(() => import('../../../pages/User/Diary'))
-const Profile = lazy(() => import('../../../pages/User/Profile'))
-const Students = lazy(() => import('../../../pages/Admin/Lists'))
-const Student = lazy(() => import('../../../pages/User/Student'))
+import { ReactNode } from 'react'
+import DiaryStudent from '../../../pages/User/Diary'
+import Lists from '../../../pages/Admin/Lists'
+import InternshipAdmin from '../../../pages/Admin/Internship'
+import DiaryAdmin from '../../../pages/Admin/Diary'
+import { Startup } from '../../../pages/User/Startup'
+import { InternshipProgress } from '../../../pages/User/InternshipProgresses'
+import { InternshipStudent } from '../../../pages/User/Internship'
 
 export interface IRoute {
   path: string
@@ -16,29 +17,45 @@ export interface IRoute {
 
 export const ProtectedRoutes: Array<IRoute> = [
   {
-    path: '/internship',
-    title: 'Стажировки',
-    element: <Internship />,
-  },
-  {
-    path: '/diary',
-    title: 'Дневники',
-    element: <Diary />,
-  },
-  {
-    path: '/profile',
-    title: 'Профиль',
-    element: <Profile />,
-  },
-  {
-    path: '/students',
-    title: 'Списки',
-    element: <Students />,
+    path: '/student',
+    title: 'Студент',
     children: [
       {
-        path: '/students/:id',
+        path: 'startup',
+        title: 'Компании',
+        element: <Startup />,
+      },
+      {
+        path: 'internship/progress',
+        title: 'Собеседования',
+        element: <InternshipStudent />,
+      },
+      {
+        path: 'diary/:id',
+        title: 'Дневники',
+        element: <DiaryStudent />,
+      },
+      {
+        path: 'internship',
+        title: 'Стажировки',
+        element: <InternshipProgress />,
+      },
+    ],
+  },
+  {
+    path: 'admin/lists',
+    title: 'Списки',
+    element: <Lists />,
+    children: [
+      {
+        path: 'internship/:id',
         title: 'Студент',
-        element: <Student />,
+        element: <InternshipAdmin />,
+      },
+      {
+        path: 'diary/:id',
+        title: 'Студент',
+        element: <DiaryAdmin />,
       },
     ],
   },

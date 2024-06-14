@@ -1,8 +1,16 @@
-import { DiaryType } from '../../../shared/types/diary/Diary.ts'
-import { Card, Typography } from 'antd'
+import { Button, Card, Flex, Typography, Upload } from 'antd'
+import { UserDiary } from '../../../shared/types/diary/UserDiary.ts'
+import { DiaryTypeEnum } from '../../../shared/types/diary/DiaryTypeEnum.ts'
+import { UploadOutlined, DownloadOutlined } from '@ant-design/icons'
 
 interface DiaryListItemProps {
-  item: DiaryType
+  item: UserDiary
+}
+
+const typeMapper = {
+  [DiaryTypeEnum.DEFAULT]: 'Стандартный дневник',
+  [DiaryTypeEnum.COURSE]: 'Курсовая',
+  [DiaryTypeEnum.GRADUATION]: 'Диплом',
 }
 
 const { Text } = Typography
@@ -21,28 +29,57 @@ export const DiaryListItem = ({
     planTable,
   },
 }: DiaryListItemProps) => {
+  const year = `${createdAt.split('-')[0]}`
   return (
     <Card
       key={id + 'inner'}
-      title={<span>{`${workName} - ${createdAt}`}</span>}
+      title={<span>{`${typeMapper[diaryType]} ${workName ? workName : 'Без названия'} : ${year}`}</span>}
     >
-      <span>{`Тип Дневника - ${diaryType}`}</span>
-      <span>{`Компания - ${companyName}`}</span>
-      <span>{`Студент - ${studentFullName}`}</span>
-      <span>{`Куратор - ${curatorFullName}`}</span>
-      <span>{`Приказ - ${orderNumber}`}</span>
-      <div>
-        <span>{`Характеристика`}</span>
-        <Text>{studentCharacteristics}</Text>
-      </div>
-      <div>
-        <span>{`Таблица с здачами`}</span>
-        <Text>{taskReportTable}</Text>
-      </div>
-      <div>
-        <span>{`Планирование`}</span>
-        <Text>{planTable}</Text>
-      </div>
+      <Flex vertical>
+        <Text>{`Компания - ${companyName}`}</Text>
+        <Text>{`Студент - ${studentFullName}`}</Text>
+        <Text>{`Куратор - ${curatorFullName}`}</Text>
+        <Text>{`Приказ - ${orderNumber}`}</Text>
+        <Flex
+          vertical
+          gap={5}
+        >
+          <Text strong>{`Характеристика: `}</Text>
+          {studentCharacteristics ? (
+            <Button icon={<DownloadOutlined />} />
+          ) : (
+            <Upload>
+              <Button icon={<UploadOutlined />}>Загрузить</Button>
+            </Upload>
+          )}
+        </Flex>
+        <Flex
+          vertical
+          gap={5}
+        >
+          <Text strong>{`Таблица с здачами`}</Text>
+          {taskReportTable ? (
+            <Button icon={<DownloadOutlined />} />
+          ) : (
+            <Upload>
+              <Button icon={<UploadOutlined />}>Загрузить</Button>
+            </Upload>
+          )}
+        </Flex>
+        <Flex
+          vertical
+          gap={5}
+        >
+          <Text strong>{`Планирование`}</Text>
+          {planTable ? (
+            <Button icon={<DownloadOutlined />} />
+          ) : (
+            <Upload>
+              <Button icon={<UploadOutlined />}>Загрузить</Button>
+            </Upload>
+          )}
+        </Flex>
+      </Flex>
     </Card>
   )
 }

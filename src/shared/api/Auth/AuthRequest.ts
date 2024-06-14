@@ -17,7 +17,6 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}api/auth/`,
-    mode: 'no-cors',
     prepareHeaders: headers => {
       const token = localStorage.getItem('userToken')
 
@@ -55,7 +54,7 @@ export const authApi = createApi({
       }),
     }),
     GetStudents: builder.query<GetLoadedStudentsResponse, GetLoadedStudentsPayload>({
-      query: () => `students/table`,
+      query: _ => `students/table`,
     }),
   }),
 })
