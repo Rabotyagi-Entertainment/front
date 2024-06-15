@@ -1,8 +1,8 @@
 import { Button, Form, Input, InputNumber, Layout, Select, Space, Typography } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { useGetCompaniesQuery } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
-import { GetCompaniesResponse } from '../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
-import { useAddCompanyMutation, useRemoveCompanyMutation } from '../../../shared/api/Internship/InternshipRequest.ts'
+import { useGetCompaniesQuery } from '../../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
+import { GetCompaniesResponse } from '../../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
+import { useAddCompanyMutation, useRemoveCompanyMutation } from '../../../../shared/api/Internship/InternshipRequest.ts'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'antd/es/form/Form'
 

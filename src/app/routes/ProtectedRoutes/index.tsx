@@ -3,7 +3,6 @@ import DiaryStudent from '../../../pages/User/Diary'
 import Lists from '../../../pages/Admin/Lists'
 import InternshipAdmin from '../../../pages/Admin/Internship'
 import DiaryAdmin from '../../../pages/Admin/Diary'
-import { Startup } from '../../../pages/User/Startup'
 import { InternshipProgress } from '../../../pages/User/InternshipProgresses'
 import { InternshipStudent } from '../../../pages/User/Internship'
 
@@ -20,11 +19,6 @@ export const ProtectedRoutes: Array<IRoute> = [
     path: '/student',
     title: 'Студент',
     children: [
-      {
-        path: 'startup',
-        title: 'Компании',
-        element: <Startup />,
-      },
       {
         path: 'internship/progress',
         title: 'Собеседования',
