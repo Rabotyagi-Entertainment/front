@@ -3,6 +3,8 @@ import { baseUrl } from '../static/authConfig.ts'
 import {
   CreateInternshipCompanyPayload,
   CreateInternshipCompanyResponse,
+  GetAdminStudentInternshipPayload,
+  GetAdminStudentInternshipResponse,
   GetCompaniesPayload,
   GetCompaniesResponse,
   GetStudentsListSearchablePayload,
@@ -62,6 +64,9 @@ export const internshipAdminApi = createApi({
     GetStudentsStatuses: builder.query<GetStudentsStatusesResponse, GetStudentsStatusesPayload>({
       query: ({ userId }) => `admin/internship//${userId}`,
     }),
+    GetStudentsInternships: builder.query<GetAdminStudentInternshipResponse, GetAdminStudentInternshipPayload>({
+      query: ({ studentId }) => `admin/internship/internship/student/${studentId}`,
+    }),
     Comment: builder.mutation<LeaveCommentProgressResponse, LeaveCommentProgressPayload>({
       query: ({ text, internshipProgressId }) => ({
         url: `/internship/progress/${internshipProgressId}/status`,
@@ -80,4 +85,5 @@ export const {
   useGetStudentsParametersQuery,
   useLazyGetStudentsParametersQuery,
   useGetStudentsStatusesQuery,
+  useGetStudentsInternshipsQuery,
 } = internshipAdminApi

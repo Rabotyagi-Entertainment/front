@@ -47,6 +47,11 @@ export const ProtectedRoutes: Array<IRoute> = [
         element: <InternshipAdmin />,
       },
       {
+        path: 'internship/progress/:id',
+        title: 'Студент',
+        element: <InternshipAdmin />,
+      },
+      {
         path: 'diary/:id',
         title: 'Студент',
         element: <DiaryAdmin />,

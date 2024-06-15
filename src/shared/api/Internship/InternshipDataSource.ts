@@ -52,7 +52,7 @@ export interface UpdateInternshipProgressStatusPayload {
 export interface UpdateInternshipProgressStatusResponse {}
 
 export interface GetStudentInternshipProgressPayload {}
-type InternshipProgressResponse = {
+export type InternshipProgressResponse = {
   id: string
   priority: number
   createdAt: string
@@ -70,7 +70,7 @@ type InternshipProgressResponse = {
 export interface GetStudentInternshipProgressResponse extends InternshipProgressResponse {}
 
 export interface GetStudentInternshipPayload {}
-type InternshipResponse = {
+export type InternshipResponse = {
   id: string
   company: {
     id: string
