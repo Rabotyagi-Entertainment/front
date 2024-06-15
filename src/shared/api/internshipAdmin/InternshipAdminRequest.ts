@@ -42,8 +42,19 @@ export const internshipAdminApi = createApi({
       }),
     }),
     GetStudentsParameters: builder.query<GetStudentsListSearchableResponse, GetStudentsListSearchablePayload>({
-      query: ({ search, company, group }) =>
-        `admin/internship/students?search=${search}&company=${company}&group=${group}`,
+      query: ({ search, company, group }) => {
+        let queryParameters = ''
+        const array = [search, company, group]
+        array.map((item, number) => {
+          if (!number) {
+            queryParameters += '?'
+          }
+          if (item !== undefined) {
+            queryParameters += `${item}=${item}`
+          }
+        })
+        return `admin/internship/students?${queryParameters}`
+      },
     }),
     ExportStudentTable: builder.query<GetStudentsTableResponse, GetStudentsTablePayload>({
       query: () => `admin/internship/students/table`,
@@ -67,5 +78,6 @@ export const {
   useCommentMutation,
   useExportStudentTableQuery,
   useGetStudentsParametersQuery,
+  useLazyGetStudentsParametersQuery,
   useGetStudentsStatusesQuery,
 } = internshipAdminApi

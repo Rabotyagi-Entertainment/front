@@ -1,15 +1,21 @@
 import { Button, Form, FormProps, Input, Layout, Typography } from 'antd'
 import { useLoginMutation } from '../../../shared/api/Auth/AuthRequest.ts'
 import { LoginPayload } from '../../../shared/api/Auth/AuthDataSource.ts'
+import { useNavigate } from 'react-router-dom'
 
 type FieldType = LoginPayload
 
 const { Title } = Typography
 const AdminAuth = () => {
-  const [authTrigger] = useLoginMutation()
+  const [authTrigger, result] = useLoginMutation()
+  const navigate = useNavigate()
 
   const onFinish = (values: FieldType) => {
-    authTrigger(values)
+    authTrigger(values).then(response => {
+      // @ts-ignore
+      localStorage.setItem('userToken', response.error.data.toString())
+      navigate('/admin/lists')
+    })
   }
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = errorInfo => {
@@ -44,6 +50,7 @@ const AdminAuth = () => {
 
           <Form.Item>
             <Button
+              loading={result.isLoading}
               type='primary'
               htmlType='submit'
             >
