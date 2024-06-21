@@ -2,10 +2,10 @@ import { Collapse, CollapseProps, Empty, Flex, Layout, Spin, Typography } from '
 import { useLazyGetDiariesListQuery } from '../../../shared/api/Diary/DiaryRequest.ts'
 import { useParams } from 'react-router-dom'
 import { GetDiaryListResponse } from '../../../shared/api/Diary/DiaryDataSource.ts'
-import { DiaryListItem } from '../../../entities/ui/Diary/DiaryListItem.tsx'
 import { CreateDiaryModal } from '../../../Features/diary/CreateDiaryModal'
 import { useEffect } from 'react'
 import { WorkModeMapper } from '../../../shared/library/utils/utils.ts'
+import { DiaryListItem } from '../../../entities/ui/Diary/DiaryStudentItem'
 
 const { Title } = Typography
 

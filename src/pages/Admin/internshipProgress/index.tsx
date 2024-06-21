@@ -3,13 +3,13 @@ import {
   useCommentMutation,
   useGetStudentsAdminInternshipsQuery,
 } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
-import { List, Spin, Table, TableProps, Tag, Typography } from 'antd'
+import { Spin, Table, TableProps, Tag, Typography } from 'antd'
 import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
 import { GetAdminStudentInternshipResponse } from '../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
 import { CommentsModal } from '../../../Features/internshipProgress/Comments'
 import { InternshipProgressEnum } from '../../../shared/types/internshipProgress/InternshipProgressEnum.ts'
 
-const { Title, Text } = Typography
+const { Title } = Typography
 
 const createDataSource = (dataSource: GetAdminStudentInternshipResponse) => {
   return dataSource!.map(item => {
@@ -17,10 +17,11 @@ const createDataSource = (dataSource: GetAdminStudentInternshipResponse) => {
       key: item.id,
       internshipId: item.id,
       additionalInfo: item.additionalInfo,
+      comments: item.comments,
       company: item.company.name,
+      companyPartner: item.company.isPartner,
       companyId: item.company.id,
-      startedAt: item.startedAt.split('T')[0],
-      endedAt: item.endedAt ? item.endedAt.split('T')[0] : 'По настоящее время',
+      progressStatus: item.progressStatus,
     }
   })
 }
@@ -42,6 +43,21 @@ export const InternshipProgressAdmin = () => {
       key: 'company',
     },
     {
+      title: 'Дополнительно',
+      dataIndex: 'additionalInfo',
+      key: 'additionalInfo',
+    },
+    {
+      title: 'Партнер',
+      dataIndex: 'companyPartner',
+      key: 'companyPartner',
+      render: (_, record) => {
+        return (
+          <Tag color={record.companyPartner ? 'blue' : 'red'}>{record.companyPartner ? 'Партнер' : 'Не партнер'}</Tag>
+        )
+      },
+    },
+    {
       title: 'Прогресс',
       dataIndex: 'progressStatus',
       key: 'progressStatus',
@@ -52,23 +68,13 @@ export const InternshipProgressAdmin = () => {
       ),
     },
     {
-      title: 'Начало',
-      dataIndex: 'startedAt',
-      key: 'startedAt',
-    },
-    {
-      title: 'Конец',
-      dataIndex: 'endedAt',
-      key: 'endedAt',
-    },
-    {
       title: 'Комментарии',
       dataIndex: 'comments',
       key: 'comments',
       render: (_, record) => (
         <CommentsModal
           sendMessageCallback={handleSendMessage}
-          id={record.id}
+          id={record.key}
           comments={record.comments}
           title={'Комментариии'}
         />
@@ -87,20 +93,6 @@ export const InternshipProgressAdmin = () => {
         dataSource={createDataSource(data!)}
         columns={columns}
       />
-      <List>
-        {data!.map(item => {
-          return (
-            <List.Item>
-              <Text>{`Компания: ${item.company.name}`}</Text>
-              <Text>{item.additionalInfo}</Text>
-
-              <Tag color={statusInternshipProgressMapper[item.progressStatus].color}>
-                {statusInternshipProgressMapper[item.progressStatus].text}
-              </Tag>
-            </List.Item>
-          )
-        })}
-      </List>
     </>
   )
 }

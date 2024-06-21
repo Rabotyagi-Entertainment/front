@@ -12,9 +12,12 @@ const AdminAuth = () => {
 
   const onFinish = (values: FieldType) => {
     authTrigger(values).then(response => {
-      // @ts-ignore
-      localStorage.setItem('userToken', response.error.data.toString())
-      navigate('/admin/lists')
+      if (response.error) {
+        alert(`Error: ${response.error}`)
+      } else {
+        localStorage.setItem('userToken', response!.data.jwt)
+        navigate('/admin/lists')
+      }
     })
   }
 
