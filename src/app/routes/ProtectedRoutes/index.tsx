@@ -3,8 +3,10 @@ import DiaryStudent from '../../../pages/User/Diary'
 import Lists from '../../../pages/Admin/Lists'
 import InternshipAdmin from '../../../pages/Admin/Internship'
 import DiaryAdmin from '../../../pages/Admin/Diary'
-import { InternshipProgress } from '../../../pages/User/InternshipProgresses'
+import { InternshipProgressStudent } from '../../../pages/User/InternshipProgresses'
 import { InternshipStudent } from '../../../pages/User/Internship'
+import { InternshipProgressAdmin } from '../../../pages/Admin/internshipProgress'
+import { RouteType } from '../RouteType.ts'
 
 export interface IRoute {
   path: string
@@ -22,7 +24,7 @@ export const ProtectedRoutes: Array<IRoute> = [
       {
         path: 'internship/progress',
         title: 'Собеседования',
-        element: <InternshipStudent />,
+        element: <InternshipProgressStudent />,
       },
       {
         path: 'diary/:id',
@@ -32,30 +34,28 @@ export const ProtectedRoutes: Array<IRoute> = [
       {
         path: 'internship',
         title: 'Стажировки',
-        element: <InternshipProgress />,
+        element: <InternshipStudent />,
       },
     ],
   },
   {
-    path: 'admin/lists',
+    path: `${RouteType.ADMIN_INTERNSHIP}/:id`,
+    title: 'Администрирование стажировки',
+    element: <InternshipAdmin />,
+  },
+  {
+    path: `${RouteType.ADMIN_INTERNSHIP_PROGRESS}/:id`,
+    title: 'Администрирование собеседований',
+    element: <InternshipProgressAdmin />,
+  },
+  {
+    path: `${RouteType.ADMIN_DIARY}/:id`,
+    title: 'Студенческие дневники',
+    element: <DiaryAdmin />,
+  },
+  {
+    path: RouteType.ADMIN_LISTS,
     title: 'Списки',
     element: <Lists />,
-    children: [
-      {
-        path: 'internship/:id',
-        title: 'Студент',
-        element: <InternshipAdmin />,
-      },
-      {
-        path: 'internship/progress/:id',
-        title: 'Студент',
-        element: <InternshipAdmin />,
-      },
-      {
-        path: 'diary/:id',
-        title: 'Студент',
-        element: <DiaryAdmin />,
-      },
-    ],
   },
 ]

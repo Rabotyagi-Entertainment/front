@@ -1,23 +1,16 @@
 import { useState } from 'react'
-import { Button, Flex, Modal, Radio } from 'antd'
+import { Flex, Modal, Radio, Tag } from 'antd'
 import { InternshipProgressEnum } from '../../../shared/types/internshipProgress/InternshipProgressEnum.ts'
 import { useChangeStatusMutation } from '../../../shared/api/Internship/InternshipRequest.ts'
+import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
 
 interface StatusModalProps {
   progressStatus: InternshipProgressEnum
   companyId: string
+  refetchCallback: () => void
 }
 
-const statusMapper = {
-  [InternshipProgressEnum.DEFAULT]: 'Не начал',
-  [InternshipProgressEnum.SUBMITTED_RESUME]: 'Отправил резюме',
-  [InternshipProgressEnum.IN_SELECTION_PROGRESS]: 'Прохожу собеседования',
-  [InternshipProgressEnum.REJECT]: 'Отказ',
-  [InternshipProgressEnum.RECIEVED_OFFER]: 'Получил оффер',
-  [InternshipProgressEnum.ACCEPT_OFFER]: 'Принял оффер',
-}
-
-export const StatusModal = ({ progressStatus, companyId }: StatusModalProps) => {
+export const StatusModal = ({ progressStatus, companyId, refetchCallback }: StatusModalProps) => {
   const [trigger] = useChangeStatusMutation()
   const [show, setShow] = useState<boolean>(false)
 
@@ -27,10 +20,12 @@ export const StatusModal = ({ progressStatus, companyId }: StatusModalProps) => 
 
   const handleOk = () => {
     setShow(false)
+    refetchCallback()
   }
 
   const handleCancel = () => {
     setShow(false)
+    refetchCallback()
   }
   const handleChangeRequest = (value: InternshipProgressEnum) => {
     trigger({ companyId: companyId, payload: value })
@@ -38,7 +33,13 @@ export const StatusModal = ({ progressStatus, companyId }: StatusModalProps) => 
 
   return (
     <>
-      <Button onClick={showModal}>{statusMapper[progressStatus]}</Button>
+      <Tag
+        style={{ cursor: 'pointer' }}
+        color={statusInternshipProgressMapper[progressStatus].color}
+        onClick={showModal}
+      >
+        {statusInternshipProgressMapper[progressStatus].text}
+      </Tag>
       <Modal
         style={{ width: 'fit-content' }}
         title='Статус стажировки'
@@ -72,7 +73,7 @@ export const StatusModal = ({ progressStatus, companyId }: StatusModalProps) => 
             </Radio.Button>
             <Radio.Button
               name={'progressStatus'}
-              value={InternshipProgressEnum.RECIEVED_OFFER}
+              value={InternshipProgressEnum.RECEIVED_OFFER}
             >
               {'Получил оффер'}
             </Radio.Button>

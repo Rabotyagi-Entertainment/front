@@ -1,7 +1,8 @@
 import { UserWithCompany } from '../../../shared/types/user/UserWithCompany.ts'
 import { List, Flex, Typography } from 'antd'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { ArrowRightOutlined } from '@ant-design/icons'
+import { RouteType } from '../../../app/routes/RouteType.ts'
 
 interface StudentItemProps {
   item: UserWithCompany
@@ -23,18 +24,18 @@ export const StudentItem = ({ item: { name, group, id } }: StudentItemProps) => 
           level={4}
         >{`${name} - ${group}`}</Title>
         <Flex gap={'1rem'}>
-          <Link to={`/admin/lists/internship/${id}`}>
+          <NavLink to={`${RouteType.ADMIN_INTERNSHIP}/${id}`}>
             <Flex gap={5}>
               <span> {'Стажировки'}</span>
               <ArrowRightOutlined />
             </Flex>
-          </Link>
-          <Link to={`/admin/lists/internship/progress/${id}`}>
+          </NavLink>
+          <NavLink to={`${RouteType.ADMIN_INTERNSHIP_PROGRESS}/${id}`}>
             <Flex gap={5}>
               <span> {'Собеседования'}</span>
               <ArrowRightOutlined />
             </Flex>
-          </Link>
+          </NavLink>
         </Flex>
       </Flex>
     </List.Item>

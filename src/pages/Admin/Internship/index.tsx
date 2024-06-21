@@ -1,11 +1,11 @@
 import { NavLink, useParams } from 'react-router-dom'
 import { Layout, List, Spin, Typography } from 'antd'
-import { useGetStudentsInternshipsQuery } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
+import { useGetStudentsAdminInternshipsQuery } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 
 const { Title, Text } = Typography
 const InternshipAdmin = () => {
   const { id } = useParams()
-  const { data, isLoading } = useGetStudentsInternshipsQuery({ studentId: id! })
+  const { data, isLoading } = useGetStudentsAdminInternshipsQuery({ studentId: id! })
 
   if (isLoading) {
     return <Spin />
@@ -13,7 +13,7 @@ const InternshipAdmin = () => {
 
   return (
     <Layout>
-      <Title>{'Администрирование собеседований'}</Title>
+      <Title>{'Администрирование стажировок'}</Title>
       <List bordered>
         {data! &&
           data.map(item => {

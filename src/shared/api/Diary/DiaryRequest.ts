@@ -11,6 +11,8 @@ import {
   GetDiaryListResponse,
   GetMyDiaryFilePayload,
   GetMyDiaryFileResponse,
+  LeaveCommentPayload,
+  LeaveCommentResponse,
   LoadTaskReportPayload,
   LoadTaskReportResponse,
 } from './DiaryDataSource.ts'
@@ -67,6 +69,13 @@ export const diaryApi = createApi({
         body: JSON.stringify(file),
       }),
     }),
+    LeaveCommentDiary: builder.mutation<LeaveCommentResponse, LeaveCommentPayload>({
+      query: ({ diaryId, text }) => ({
+        url: `${diaryId}/comment`,
+        method: 'POST',
+        body: { text: text },
+      }),
+    }),
   }),
 })
 
@@ -75,6 +84,8 @@ export const {
   useEditAdditionalInfoMutation,
   useEditGeneralInfoMutation,
   useGetDiariesListQuery,
+  useLazyGetDiariesListQuery,
+  useLeaveCommentDiaryMutation,
   useGetMyDiaryFileQuery,
   useLoadReportMutation,
 } = diaryApi

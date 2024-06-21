@@ -56,6 +56,7 @@ export type InternshipProgressResponse = {
   id: string
   priority: number
   createdAt: string
+  additionalInfo: string
   company: {
     id: string
     name: 'string'
@@ -77,8 +78,9 @@ export type InternshipResponse = {
     name: string
     isPartner: boolean
   }
+  additionalInfo: string
   practiceDiaries: PracticeDiary[]
   startedAt: string
-  endedAt: null
+  endedAt?: string
 }[]
 export interface GetStudentInternshipResponse extends InternshipResponse {}

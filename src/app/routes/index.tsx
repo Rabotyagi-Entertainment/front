@@ -1,6 +1,7 @@
 import { Navigate, useRoutes } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import { ProtectedRoutes } from './ProtectedRoutes'
+import { RouteType } from './RouteType.ts'
 
 const Auth = lazy(() => import('../../pages/User/Auth'))
 const AdminAuth = lazy(() => import('../../pages/Admin/Auth'))
@@ -9,15 +10,15 @@ const MainLayout = lazy(() => import('../../pages/Layout'))
 const createRoutes = (isAuth: boolean) => [
   {
     path: '/',
-    element: isAuth ? <MainLayout /> : <Navigate to={'/login'} />,
+    element: isAuth ? <MainLayout /> : <Navigate to={RouteType.STUDENT_LOGIN} />,
     children: ProtectedRoutes,
   },
   {
-    path: '/login',
+    path: RouteType.STUDENT_LOGIN,
     element: <Auth />,
   },
   {
-    path: '/admin/login',
+    path: RouteType.ADMIN_LOGIN,
     element: <AdminAuth />,
   },
   // {

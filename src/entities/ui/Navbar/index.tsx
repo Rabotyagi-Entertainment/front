@@ -1,12 +1,9 @@
 import { Typography } from 'antd'
-import { NavLink } from 'react-router-dom'
-import { useGetProfileQuery } from '../../../shared/api/Auth/AuthRequest.ts'
-import { RolesEnum } from '../../../shared/types/user/RolesEnum.ts'
 
 const { Title } = Typography
 
 export const Navbar = () => {
-  const { data } = useGetProfileQuery({})
+  // const { data } = useGetProfileQuery({})
 
   return (
     <div style={{ width: '100%' }}>
@@ -25,18 +22,20 @@ export const Navbar = () => {
         >
           Добро пожаловать в систему стажировок
         </Title>
-        <span style={{ display: 'flex', gap: '1rem' }}>
-          {data! && data.roles === RolesEnum.ADMIN && <NavLink to={'admin/diary'}>{'Дневники'}</NavLink>}
-          {data! && data.roles.includes(RolesEnum.ADMIN) ? (
-            <NavLink to={'admin/internship'}>{'Стажировки'}</NavLink>
-          ) : (
-            <>
-              <NavLink to={'student/internship'}>{'Собеседования'}</NavLink>
-              <NavLink to={'student/internship/progress'}>{'Стажировки'}</NavLink>
-            </>
-          )}
-          {data! && <>{data.roles.includes(RolesEnum.ADMIN) && <NavLink to={'/students'}>{'Дневники'}</NavLink>}</>}
-        </span>
+        {/*<span style={{ display: 'flex', gap: '1rem' }}>*/}
+        {/*  {data! && data.roles.includes(RolesEnum.ADMIN) ? (*/}
+        {/*    <>*/}
+        {/*      <NavLink to={RouteType.ADMIN_INTERNSHIP}>{'Стажировки'}</NavLink>*/}
+        {/*      <NavLink to={RouteType.ADMIN_DIARY}>{'Дневники'}</NavLink>*/}
+        {/*      <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>*/}
+        {/*    </>*/}
+        {/*  ) : (*/}
+        {/*    <>*/}
+        {/*      <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'Собеседования'}</NavLink>*/}
+        {/*      <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'Стажировки'}</NavLink>*/}
+        {/*    </>*/}
+        {/*  )}*/}
+        {/*</span>*/}
       </span>
     </div>
   )

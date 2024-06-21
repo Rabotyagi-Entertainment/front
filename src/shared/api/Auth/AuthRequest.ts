@@ -23,7 +23,6 @@ export const authApi = createApi({
       if (token && !headers.has('Authorization')) {
         headers.set('Authorization', `Bearer ${token!}`)
       }
-      headers.set('Content-Type', 'application/json')
 
       return headers
     },
@@ -51,6 +50,10 @@ export const authApi = createApi({
         url: `students/table`,
         method: 'POST',
         body: data,
+        headers: {
+          accept: '*/*',
+          'Content-Type': 'multipart/form-data',
+        },
       }),
     }),
     GetStudents: builder.query<GetLoadedStudentsResponse, GetLoadedStudentsPayload>({

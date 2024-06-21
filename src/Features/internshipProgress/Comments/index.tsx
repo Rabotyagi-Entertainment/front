@@ -1,20 +1,19 @@
 import { CommentType } from '../../../shared/types/internship/Comment.ts'
 import { useState } from 'react'
-import { Button, Empty, Flex, List, Modal, Typography } from 'antd'
-import { RolesEnum } from '../../../shared/types/user/RolesEnum.ts'
+import { Button, Empty, List, Modal } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { useCommentMutation } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
+import { CommentItem } from '../../../entities/ui/CommentItem'
+
+type messageCredentials = { value: string; id: string }
 
 interface CommentsModalType {
   comments: CommentType[]
   title: string
-  companyId: string
-  refetchCallback: () => void
+  id: string
+  sendMessageCallback: (data: messageCredentials) => void
 }
-const { Text, Title } = Typography
 
-export const CommentsModal = ({ comments, title, companyId, refetchCallback }: CommentsModalType) => {
-  const [trigger, result] = useCommentMutation()
+export const CommentsModal = ({ comments, title, id, sendMessageCallback }: CommentsModalType) => {
   const [value, setValue] = useState<string>('')
   const [show, setShow] = useState<boolean>(false)
 
@@ -31,56 +30,44 @@ export const CommentsModal = ({ comments, title, companyId, refetchCallback }: C
   }
 
   const handleSendComment = () => {
-    trigger({ internshipProgressId: companyId, text: value }).then(_ => {
-      refetchCallback()
-      setValue('')
-    })
+    sendMessageCallback({ value: value, id: id })
+    setValue('')
   }
 
   return (
     <>
       <Button onClick={showModal}>{title}</Button>
       <Modal
-        title='Комментарии к стажировке'
+        title={title}
         open={show}
         onOk={handleOk}
         onCancel={handleCancel}
         footer={[
           <Button
             type='primary'
-            loading={result.isLoading}
             onClick={handleSendComment}
           >
             Отправить
           </Button>,
         ]}
       >
-        <List style={{ minHeight: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <List
+          style={{
+            minHeight: '300px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            maxHeight: '30rem',
+            overflowY: 'auto',
+          }}
+        >
           {comments! && comments.length > 0 ? (
-            comments.map((item, number) => {
+            [...comments].reverse().map((item, number) => {
               return (
-                <List.Item
+                <CommentItem
                   key={number}
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: `${item.roleType === RolesEnum.USER ? 'right' : 'left'}`,
-                  }}
-                >
-                  <Flex
-                    vertical
-                    style={{ border: '1px black solid', borderRadius: '1rem', padding: '1rem' }}
-                  >
-                    <Title
-                      style={{ marginTop: 0 }}
-                      color={item.roleType === RolesEnum.USER ? 'black' : 'blue'}
-                      level={5}
-                    >
-                      {item.author}
-                    </Title>
-                    <Text style={{ width: 'fit-content' }}>{item.text}</Text>
-                  </Flex>
-                </List.Item>
+                  comment={item}
+                />
               )
             })
           ) : (

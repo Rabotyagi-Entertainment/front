@@ -8,14 +8,16 @@ export interface RegisterPayload {
   fullName: string
 }
 export interface RegisterResponse {
-  token: string
+  jwt: string
 }
 
 export interface LoginPayload {
   telegramUserName: string
   password: string
 }
-export interface LoginResponse {}
+export interface LoginResponse {
+  jwt: string
+}
 
 export interface ProfilePayload {}
 export interface ProfileResponse {

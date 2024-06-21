@@ -39,19 +39,16 @@ export const Startup = () => {
   }
 
   const onFinish = () => {
-    if (form.getFieldsValue().companies.length > 0) {
-      const { companyId, priority, additionalInfo } = form.getFieldsValue().companies[-1]
-      trigger({
-        companyId: companyId,
-        payload: { status: 'Default', additionalInfo: additionalInfo, priority: priority },
-      }).then(response => {
-        if (!response.error) {
-          navigate('/student/internship/progress')
-        }
-      })
-    } else {
-      navigate('/student/internship/progress')
-    }
+    const len = form.getFieldsValue().companies.length
+    const { companyId, priority, additionalInfo } = form.getFieldsValue().companies[len - 1]
+    trigger({
+      companyId: companyId,
+      payload: { status: 'Default', additionalInfo: additionalInfo, priority: priority },
+    }).then(response => {
+      if (!response.error) {
+        navigate('/student/internship/progress')
+      }
+    })
   }
 
   return (
@@ -106,6 +103,7 @@ export const Startup = () => {
               <Form.Item>
                 <Button
                   type='dashed'
+                  disabled={fields.length < 1}
                   onClick={() => {
                     add()
                     onAddCompany()

@@ -4,6 +4,8 @@ import {
   CreateInternshipCompanyPayload,
   CreateInternshipCompanyResponse,
   GetAdminStudentInternshipPayload,
+  GetAdminStudentInternshipProgressPayload,
+  GetAdminStudentInternshipProgressResponse,
   GetAdminStudentInternshipResponse,
   GetCompaniesPayload,
   GetCompaniesResponse,
@@ -64,7 +66,13 @@ export const internshipAdminApi = createApi({
     GetStudentsStatuses: builder.query<GetStudentsStatusesResponse, GetStudentsStatusesPayload>({
       query: ({ userId }) => `admin/internship//${userId}`,
     }),
-    GetStudentsInternships: builder.query<GetAdminStudentInternshipResponse, GetAdminStudentInternshipPayload>({
+    GetStudentsAdminInternships: builder.query<GetAdminStudentInternshipResponse, GetAdminStudentInternshipPayload>({
+      query: ({ studentId }) => `admin/internship/progress/student/${studentId}`,
+    }),
+    GetStudentsAdminInternshipsProgress: builder.query<
+      GetAdminStudentInternshipProgressResponse,
+      GetAdminStudentInternshipProgressPayload
+    >({
       query: ({ studentId }) => `admin/internship/internship/student/${studentId}`,
     }),
     Comment: builder.mutation<LeaveCommentProgressResponse, LeaveCommentProgressPayload>({
@@ -85,5 +93,6 @@ export const {
   useGetStudentsParametersQuery,
   useLazyGetStudentsParametersQuery,
   useGetStudentsStatusesQuery,
-  useGetStudentsInternshipsQuery,
+  useGetStudentsAdminInternshipsProgressQuery,
+  useGetStudentsAdminInternshipsQuery,
 } = internshipAdminApi

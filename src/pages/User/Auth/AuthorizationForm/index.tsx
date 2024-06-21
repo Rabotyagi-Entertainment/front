@@ -2,7 +2,7 @@ import { Button, Form, FormProps, Input, Select, Spin } from 'antd'
 import { useGetStudentsQuery, useRegisterMutation } from '../../../../shared/api/Auth/AuthRequest.ts'
 import { GetLoadedStudentsResponse, RegisterPayload } from '../../../../shared/api/Auth/AuthDataSource.ts'
 
-type FieldType = Omit<RegisterPayload, 'telegramUserName'>
+type FieldType = RegisterPayload
 
 interface AuthorizationFormProps {
   successCallback: () => void
@@ -22,11 +22,11 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
   const { data, isFetching } = useGetStudentsQuery({})
 
   const onFinish = (values: FieldType) => {
-    authTrigger({ telegramUserName: 'username', ...values }).then(response => {
+    authTrigger({ ...values }).then(response => {
       if (response.error) {
         alert(`Ошибка: ${response.error}`)
       } else {
-        localStorage.setItem('userToken', response.data.token)
+        localStorage.setItem('userToken', response.data.jwt)
         successCallback()
       }
     })
@@ -50,7 +50,7 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
     <>
       <Form
         name='register'
-        initialValues={{ password: '', fullName: '', email: '' }}
+        initialValues={{ password: '', fullName: '', email: '', telegramUserName: '' }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
@@ -75,6 +75,14 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
           label='Email'
           name='email'
           rules={[{ required: true, message: 'Введите почту!', type: 'email' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item<FieldType>
+          label='Telegram login'
+          name='telegramUserName'
+          rules={[{ required: true, message: 'Введите tg логин' }]}
         >
           <Input />
         </Form.Item>

@@ -1,10 +1,11 @@
 import { DiaryTypeEnum } from './DiaryTypeEnum.ts'
 import { CommentType } from '../internship/Comment.ts'
+import { DiaryStateTypeEnum } from './DiaryStateTypeEnum.ts'
 
 export interface UserDiary {
   id: string
   diaryType: DiaryTypeEnum
-  diaryState: string
+  diaryState: DiaryStateTypeEnum
   createdAt: string
   comments: CommentType[]
   studentFullName: string | null

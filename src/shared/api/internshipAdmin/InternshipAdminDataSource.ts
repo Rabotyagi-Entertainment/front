@@ -1,6 +1,6 @@
 import { UserWithCompany } from '../../types/user/UserWithCompany.ts'
 import { Company } from '../../types/internship/Company.ts'
-import { InternshipResponse } from '../Internship/InternshipDataSource.ts'
+import { InternshipProgressResponse, InternshipResponse } from '../Internship/InternshipDataSource.ts'
 
 export interface GetCompaniesPayload {}
 type Companies = Record<string, never>[]
@@ -37,4 +37,9 @@ export interface LeaveCommentProgressResponse {}
 export interface GetAdminStudentInternshipPayload {
   studentId: string
 }
-export interface GetAdminStudentInternshipResponse extends InternshipResponse {}
+export interface GetAdminStudentInternshipResponse extends InternshipProgressResponse {}
+
+export interface GetAdminStudentInternshipProgressPayload {
+  studentId: string
+}
+export interface GetAdminStudentInternshipProgressResponse extends InternshipResponse {}

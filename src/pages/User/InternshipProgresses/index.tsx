@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 const { Title } = Typography
 
-export const InternshipProgress = () => {
+export const InternshipProgressStudent = () => {
   const [trigger, result] = useLazyGetStudentInternshipProgressQuery({})
 
   useEffect(() => {

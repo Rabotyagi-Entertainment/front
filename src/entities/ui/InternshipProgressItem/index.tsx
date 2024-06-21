@@ -2,6 +2,9 @@ import { Table, TableProps } from 'antd'
 import { GetStudentInternshipProgressResponse } from '../../../shared/api/Internship/InternshipDataSource.ts'
 import { CommentsModal } from '../../../Features/internshipProgress/Comments'
 import { StatusModal } from '../../../Features/internshipProgress/StatusEdit'
+import { useCommentMutation } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
+
+type SendMessageType = { value: string; id: string }
 
 interface InternshipProgressItemProps {
   dataSource: GetStudentInternshipProgressResponse | []
@@ -23,6 +26,12 @@ const createDataSource = (dataSource: GetStudentInternshipProgressResponse) => {
 }
 
 export const InternshipProgressItem = ({ dataSource, refetchCallback }: InternshipProgressItemProps) => {
+  const [trigger] = useCommentMutation()
+
+  const handleSendMessage = ({ value, id }: SendMessageType) => {
+    trigger({ internshipProgressId: id, text: value })
+    refetchCallback()
+  }
   const columns: TableProps['columns'] = [
     {
       title: 'Компания',
@@ -45,8 +54,8 @@ export const InternshipProgressItem = ({ dataSource, refetchCallback }: Internsh
       key: 'comments',
       render: (_, record) => (
         <CommentsModal
-          refetchCallback={refetchCallback}
-          companyId={record.companyId}
+          sendMessageCallback={handleSendMessage}
+          id={record.companyId}
           comments={record.comments}
           title={record.comments.length > 0 ? record.comments.length : 'Комментарии'}
         />
@@ -59,6 +68,7 @@ export const InternshipProgressItem = ({ dataSource, refetchCallback }: Internsh
       render: (_, record) => {
         return (
           <StatusModal
+            refetchCallback={refetchCallback}
             companyId={record.companyId}
             progressStatus={record.progressStatus}
           />
@@ -66,6 +76,7 @@ export const InternshipProgressItem = ({ dataSource, refetchCallback }: Internsh
       },
     },
   ]
+
   return (
     <Table
       dataSource={createDataSource(dataSource)}
