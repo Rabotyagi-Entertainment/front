@@ -7,6 +7,7 @@ import { DiaryTypeEnum } from '../../../shared/types/diary/DiaryTypeEnum.ts'
 import { FieldLabel } from '../../../shared/ui/FieldLabel'
 import { CommentsModal } from '../../../Features/internshipProgress/Comments'
 import { useLeaveCommentDiaryMutation } from '../../../shared/api/Diary/DiaryRequest.ts'
+import { TaskReportUploading } from '../TaskReportUploading'
 
 interface DiaryListItemProps {
   item: UserDiary
@@ -99,13 +100,7 @@ export const DiaryListItem = ({
           <FieldLabel title={'Планирование работы:'}>{planTable}</FieldLabel>
         )}
         <FieldLabel title={'Таблица с здачами:'}>
-          {taskReportTable ? (
-            <Button icon={<DownloadOutlined />} />
-          ) : (
-            <Upload>
-              <Button icon={<UploadOutlined />}>Загрузить</Button>
-            </Upload>
-          )}
+          {taskReportTable ? <Button icon={<DownloadOutlined />} /> : <TaskReportUploading diaryId={id} />}
         </FieldLabel>
       </Flex>
     </Card>

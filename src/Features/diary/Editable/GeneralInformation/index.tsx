@@ -27,7 +27,7 @@ export const GeneralInformation = ({
 
   return (
     <Form
-      name='basic'
+      name='generalInfo'
       form={form}
       initialValues={{
         orderNumber: orderNumber,
@@ -41,7 +41,7 @@ export const GeneralInformation = ({
         label='Номер приказа'
         name='orderNumber'
       >
-        <Input defaultValue={orderNumber!} />
+        <Input />
       </Form.Item>
 
       <Form.Item<FieldType>
@@ -56,14 +56,14 @@ export const GeneralInformation = ({
         label='Имя Куратора'
         name='curatorFullName'
       >
-        <Input defaultValue={curatorFullName!} />
+        <Input />
       </Form.Item>
 
       <Form.Item<FieldType>
         label='Характеристика'
         name='studentCharacteristics'
       >
-        <TextArea defaultValue={studentCharacteristics!} />
+        <TextArea />
       </Form.Item>
 
       <Form.Item>

@@ -3,8 +3,8 @@ import { useLazyGetStudentsParametersQuery } from '../../../shared/api/internshi
 import { SearchOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
 import { StudentItem } from '../../../entities/ui/StudentItem'
-import { UserUploadingModal } from '../../../Features/userUploading'
 import { ExportCurrentInternship } from '../../../Features/diary/exportCurrentInternship'
+import { UserUploading } from '../../../entities/ui/UserUploading'
 
 const Lists = () => {
   const [search, setSearch] = useState<string>('')
@@ -70,7 +70,7 @@ const Lists = () => {
               </Button>
             </Form.Item>
           </Form>
-          <UserUploadingModal />
+          <UserUploading />
           <ExportCurrentInternship />
         </Space>
         {data! && data.length > 0 ? (

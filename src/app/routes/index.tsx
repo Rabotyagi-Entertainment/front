@@ -7,25 +7,26 @@ const Auth = lazy(() => import('../../pages/User/Auth'))
 const AdminAuth = lazy(() => import('../../pages/Admin/Auth'))
 const MainLayout = lazy(() => import('../../pages/Layout'))
 
-const createRoutes = (isAuth: boolean) => [
-  {
-    path: '/',
-    element: isAuth ? <MainLayout /> : <Navigate to={RouteType.STUDENT_LOGIN} />,
-    children: ProtectedRoutes,
-  },
-  {
-    path: RouteType.STUDENT_LOGIN,
-    element: <Auth />,
-  },
-  {
-    path: RouteType.ADMIN_LOGIN,
-    element: <AdminAuth />,
-  },
-  // {
-  //   path: '/*',
-  //   element: <Navigate to={'/'} />,
-  // },
-]
+const createRoutes = (isAuth: boolean) => {
+  return [
+    {
+      element: isAuth ? <MainLayout /> : <Navigate to={RouteType.STUDENT_LOGIN} />,
+      children: ProtectedRoutes,
+    },
+    {
+      path: RouteType.STUDENT_LOGIN,
+      element: <Auth />,
+    },
+    {
+      path: RouteType.ADMIN_LOGIN,
+      element: <AdminAuth />,
+    },
+    {
+      path: '*',
+      element: <Navigate to={'/'} />,
+    },
+  ]
+}
 
 export const Router = () => {
   const isAuth = localStorage.getItem('userToken')

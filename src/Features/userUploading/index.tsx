@@ -1,29 +1,32 @@
-import { useState } from 'react'
-import { Button, Modal, Upload, UploadFile } from 'antd'
+import { JSX, useState } from 'react'
+import { Button, Modal, Upload } from 'antd'
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons'
-import { useLoadStudentsMutation } from '../../shared/api/Auth/AuthRequest.ts'
 
-export const UserUploadingModal = () => {
-  const [trigger] = useLoadStudentsMutation()
+interface UploadingProps {
+  title: string
+  fileName: string
+  trigger: (file: FormData) => void
+  buttonStyle?: 'primary' | 'default'
+  icon?: JSX.Element
+}
+
+export const UploadingModal = ({
+  title,
+  trigger,
+  fileName,
+  buttonStyle = 'primary',
+  icon = <PlusOutlined />,
+}: UploadingProps) => {
+  // const [trigger] = useLoadStudentsMutation()
   const [show, setShow] = useState<boolean>(false)
-  const [file, setFile] = useState<UploadFile<File> | null>(null)
 
   const showModal = () => {
     setShow(true)
   }
-
-  const handleOk = () => {
-    if (file) {
-      trigger({ file: file.originFileObj as File })
-    }
-  }
-  const customRequest = async ({ file, onSuccess, onError }: any) => {
-    try {
-      await trigger({ file: file })
-      onSuccess(null, file)
-    } catch (error) {
-      onError(error)
-    }
+  const customRequest = (options: any) => {
+    const uploadFile = new FormData()
+    uploadFile.append(fileName, options.file)
+    trigger(uploadFile)
   }
 
   const handleCancel = () => {
@@ -33,29 +36,21 @@ export const UserUploadingModal = () => {
   return (
     <>
       <Button
-        type={'primary'}
-        icon={<PlusOutlined />}
+        type={buttonStyle}
+        icon={icon}
         onClick={showModal}
       >
-        {'Загрузить студентов'}
+        {title}
       </Button>
       <Modal
-        title='Создание дневника практики'
+        title={title}
         open={show}
         onCancel={handleCancel}
-        footer={[
-          <Button
-            type='primary'
-            onClick={handleOk}
-          >
-            Создать
-          </Button>,
-        ]}
+        footer={false}
       >
         <Upload
+          maxCount={1}
           customRequest={customRequest}
-          onChange={e => setFile(e.file)}
-          fileList={file ? [file] : []}
         >
           <Button icon={<UploadOutlined />}>{'Файл .xls'}</Button>
         </Upload>

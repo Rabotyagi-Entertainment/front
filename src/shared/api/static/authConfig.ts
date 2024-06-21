@@ -1,1 +1,1 @@
-export const baseUrl = 'http://158.160.24.205:7000/'
+export const baseUrl = 'https://coto-dev.ru/'

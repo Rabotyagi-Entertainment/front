@@ -1,12 +1,18 @@
-import { Typography } from 'antd'
+import { Flex, Layout, Typography } from 'antd'
+import { RolesEnum } from '../../../shared/types/user/RolesEnum.ts'
+import { NavLink } from 'react-router-dom'
+import { RouteType } from '../../../app/routes/RouteType.ts'
+import { ProfileResponse } from '../../../shared/api/Auth/AuthDataSource.ts'
 
 const { Title } = Typography
 
-export const Navbar = () => {
-  // const { data } = useGetProfileQuery({})
+interface NavbarProps {
+  profile: ProfileResponse | undefined
+}
 
+export const Navbar = ({ profile }: NavbarProps) => {
   return (
-    <div style={{ width: '100%' }}>
+    <Layout>
       <span
         style={{
           padding: '1rem',
@@ -22,21 +28,23 @@ export const Navbar = () => {
         >
           Добро пожаловать в систему стажировок
         </Title>
-        {/*<span style={{ display: 'flex', gap: '1rem' }}>*/}
-        {/*  {data! && data.roles.includes(RolesEnum.ADMIN) ? (*/}
-        {/*    <>*/}
-        {/*      <NavLink to={RouteType.ADMIN_INTERNSHIP}>{'Стажировки'}</NavLink>*/}
-        {/*      <NavLink to={RouteType.ADMIN_DIARY}>{'Дневники'}</NavLink>*/}
-        {/*      <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>*/}
-        {/*    </>*/}
-        {/*  ) : (*/}
-        {/*    <>*/}
-        {/*      <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'Собеседования'}</NavLink>*/}
-        {/*      <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'Стажировки'}</NavLink>*/}
-        {/*    </>*/}
-        {/*  )}*/}
-        {/*</span>*/}
+        <Flex gap={'1rem'}>
+          {profile! && profile.roles.includes(RolesEnum.ADMIN) ? (
+            <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>
+          ) : (
+            <>
+              <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'Собеседования'}</NavLink>
+              <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'Стажировки'}</NavLink>
+            </>
+          )}
+        </Flex>
+        <Title
+          style={{ lineHeight: 'normal', marginTop: 0, marginBottom: 0 }}
+          level={5}
+        >
+          {profile!.fullName}
+        </Title>
       </span>
-    </div>
+    </Layout>
   )
 }

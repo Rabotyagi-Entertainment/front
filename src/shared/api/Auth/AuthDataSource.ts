@@ -30,7 +30,7 @@ export interface ProfileResponse {
 }
 
 export interface StudentsFileUploadPayload {
-  file: File
+  file: FormData
 }
 export interface StudentsFileUploadResponse {}
 
