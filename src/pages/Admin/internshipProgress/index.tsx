@@ -7,6 +7,7 @@ import { List, Spin, Table, TableProps, Tag, Typography } from 'antd'
 import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
 import { GetAdminStudentInternshipResponse } from '../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
 import { CommentsModal } from '../../../Features/internshipProgress/Comments'
+import { InternshipProgressEnum } from '../../../shared/types/internshipProgress/InternshipProgressEnum.ts'
 
 const { Title, Text } = Typography
 
@@ -45,8 +46,8 @@ export const InternshipProgressAdmin = () => {
       dataIndex: 'progressStatus',
       key: 'progressStatus',
       render: (_, record) => (
-        <Tag color={statusInternshipProgressMapper[record.progressStatus].color}>
-          {statusInternshipProgressMapper[record.progressStatus].text}
+        <Tag color={statusInternshipProgressMapper[record.progressStatus as InternshipProgressEnum].color}>
+          {statusInternshipProgressMapper[record.progressStatus as InternshipProgressEnum].text}
         </Tag>
       ),
     },
