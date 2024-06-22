@@ -1,32 +1,45 @@
 import { JSX, useState } from 'react'
-import { Button, Modal, Upload } from 'antd'
+import { Button, Modal, Upload, UploadFile, UploadProps } from 'antd'
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons'
 
 interface UploadingProps {
   title: string
-  fileName: string
-  trigger: (file: FormData) => void
+  url: string
   buttonStyle?: 'primary' | 'default'
   icon?: JSX.Element
 }
 
-export const UploadingModal = ({
-  title,
-  trigger,
-  fileName,
-  buttonStyle = 'primary',
-  icon = <PlusOutlined />,
-}: UploadingProps) => {
-  // const [trigger] = useLoadStudentsMutation()
+export const UploadingModal = ({ title, url, buttonStyle = 'primary', icon = <PlusOutlined /> }: UploadingProps) => {
   const [show, setShow] = useState<boolean>(false)
-
   const showModal = () => {
     setShow(true)
   }
-  const customRequest = (options: any) => {
+
+  const [fileList, setFileList] = useState<UploadFile[]>()
+
+  const handleChange: UploadProps['onChange'] = info => {
+    setFileList(info.fileList)
+  }
+
+  const customRequest = async (options: any) => {
+    const { file } = options
+    console.log(file)
     const uploadFile = new FormData()
-    uploadFile.append(fileName, options.file)
-    trigger(uploadFile)
+    uploadFile.append('file', file)
+
+    console.log(uploadFile)
+
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        // 'Content-Type': 'multipart/form-data',
+        Origin: 'http://localhost:5173',
+        Referer: 'http://localhost:5173/admin/lists',
+      },
+      method: 'POST',
+      body: uploadFile,
+    }).then(res => res.json())
+    alert(JSON.stringify(`${res.message}, status: ${res.status}`))
   }
 
   const handleCancel = () => {
@@ -49,8 +62,11 @@ export const UploadingModal = ({
         footer={false}
       >
         <Upload
+          accept={'.xls'}
           maxCount={1}
           customRequest={customRequest}
+          fileList={fileList}
+          onChange={handleChange}
         >
           <Button icon={<UploadOutlined />}>{'Файл .xls'}</Button>
         </Upload>

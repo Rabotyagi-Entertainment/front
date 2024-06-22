@@ -3,6 +3,8 @@ import { List, Flex, Typography } from 'antd'
 import { NavLink } from 'react-router-dom'
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { RouteType } from '../../../app/routes/RouteType.ts'
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
+import { FieldLabel } from '../../../shared/ui/FieldLabel'
 
 interface StudentItemProps {
   item: UserWithCompany
@@ -11,6 +13,7 @@ interface StudentItemProps {
 const { Title } = Typography
 
 export const StudentItem = ({ item: { name, group, id } }: StudentItemProps) => {
+  const breakPoint = useBreakpoint()
   return (
     <List.Item style={{ width: '100%' }}>
       <Flex
@@ -21,20 +24,21 @@ export const StudentItem = ({ item: { name, group, id } }: StudentItemProps) => 
       >
         <Title
           style={{ marginTop: 0 }}
-          level={4}
+          level={breakPoint.sm ? 4 : 5}
         >{`${name} - ${group}`}</Title>
-        <Flex gap={'1rem'}>
+        <Flex
+          gap={'1rem'}
+          vertical={breakPoint.xs}
+        >
           <NavLink to={`${RouteType.ADMIN_INTERNSHIP}/${id}`}>
-            <Flex gap={5}>
-              <span> {'Стажировки'}</span>
+            <FieldLabel title={'Стажировки '}>
               <ArrowRightOutlined />
-            </Flex>
+            </FieldLabel>
           </NavLink>
           <NavLink to={`${RouteType.ADMIN_INTERNSHIP_PROGRESS}/${id}`}>
-            <Flex gap={5}>
-              <span> {'Собеседования'}</span>
+            <FieldLabel title={'Собеседования '}>
               <ArrowRightOutlined />
-            </Flex>
+            </FieldLabel>
           </NavLink>
         </Flex>
       </Flex>

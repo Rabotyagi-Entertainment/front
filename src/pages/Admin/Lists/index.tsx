@@ -3,11 +3,14 @@ import { useLazyGetStudentsParametersQuery } from '../../../shared/api/internshi
 import { useEffect } from 'react'
 import { StudentItem } from '../../../entities/ui/StudentItem'
 import { ExportCurrentInternship } from '../../../Features/diary/exportCurrentInternship'
-import { UserUploading } from '../../../entities/ui/UserUploading'
 import { useForm } from 'antd/es/form/Form'
+import { baseUrl } from '../../../shared/api/static/authConfig.ts'
+import { UploadingModal } from '../../../Features/userUploading'
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 
 const Lists = () => {
   const [form] = useForm()
+  const breakPoint = useBreakpoint()
   const [trigger, { data }] = useLazyGetStudentsParametersQuery()
 
   useEffect(() => {
@@ -27,7 +30,7 @@ const Lists = () => {
             layout={'vertical'}
             onChange={handleSearch}
             initialValues={{ company: '', search: '', group: '' }}
-            style={{ display: 'flex', gap: '1rem', alignItems: 'end', flexWrap: 'wrap' }}
+            style={{ display: 'flex', gap: `${breakPoint.sm ? '1rem' : 0}`, alignItems: 'end', flexWrap: 'wrap' }}
           >
             <Form.Item
               label='Поиск'
@@ -48,10 +51,17 @@ const Lists = () => {
               <Input />
             </Form.Item>
           </Form>
-          <Space style={{ marginBottom: '1rem' }}>
-            <UserUploading />
+          <Flex
+            gap={'1rem'}
+            wrap
+            style={{ marginBottom: '1rem' }}
+          >
+            <UploadingModal
+              title={'Загрузить список студентов'}
+              url={baseUrl + 'api/auth/students/table'}
+            />
             <ExportCurrentInternship />
-          </Space>
+          </Flex>
         </Flex>
         {data! && data.length > 0 ? (
           <List bordered>

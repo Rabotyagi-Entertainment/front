@@ -3,6 +3,7 @@ import { RolesEnum } from '../../../shared/types/user/RolesEnum.ts'
 import { NavLink } from 'react-router-dom'
 import { RouteType } from '../../../app/routes/RouteType.ts'
 import { ProfileResponse } from '../../../shared/api/Auth/AuthDataSource.ts'
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 
 const { Title } = Typography
 
@@ -11,16 +12,15 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ profile }: NavbarProps) => {
+  const breakPoint = useBreakpoint()
+
   return (
     <Layout>
-      <span
-        style={{
-          padding: '1rem',
-          display: 'flex',
-          gap: '1rem',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
+      <Flex
+        style={{ padding: '1rem' }}
+        gap={'1rem'}
+        align={'center'}
+        justify={'space-between'}
       >
         <Title
           style={{ lineHeight: 'normal', marginTop: 0, marginBottom: 0 }}
@@ -38,13 +38,15 @@ export const Navbar = ({ profile }: NavbarProps) => {
             </>
           )}
         </Flex>
-        <Title
-          style={{ lineHeight: 'normal', marginTop: 0, marginBottom: 0 }}
-          level={5}
-        >
-          {profile!.fullName}
-        </Title>
-      </span>
+        {breakPoint.lg && (
+          <Title
+            style={{ lineHeight: 'normal', marginTop: 0, marginBottom: 0 }}
+            level={5}
+          >
+            {profile!.fullName}
+          </Title>
+        )}
+      </Flex>
     </Layout>
   )
 }
