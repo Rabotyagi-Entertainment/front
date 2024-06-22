@@ -1,12 +1,11 @@
-import { Button, Card, Flex, Tag, Typography, Upload } from 'antd'
-import { UserDiary } from '../../../shared/types/diary/UserDiary.ts'
-import { UploadOutlined, DownloadOutlined } from '@ant-design/icons'
-import { DiaryStatusMapper, WorkModeMapper } from '../../../shared/library/utils/utils.ts'
-import { EditInformation } from '../../../Features/diary/Editable'
-import { DiaryTypeEnum } from '../../../shared/types/diary/DiaryTypeEnum.ts'
-import { FieldLabel } from '../../../shared/ui/FieldLabel'
-import { CommentsModal } from '../../../Features/internshipProgress/Comments'
-import { useLeaveCommentDiaryMutation } from '../../../shared/api/Diary/DiaryRequest.ts'
+import { Button, Card, Flex, Tag, Typography } from 'antd'
+import { UserDiary } from '../../../../shared/types/diary/UserDiary.ts'
+import { DownloadOutlined } from '@ant-design/icons'
+import { DiaryStatusMapper, WorkModeMapper } from '../../../../shared/library/utils/utils.ts'
+import { FieldLabel } from '../../../../shared/ui/FieldLabel'
+import { CommentsModal } from '../../../../Features/internshipProgress/Comments'
+import { ChangeStatusAdmin } from '../../../../Features/diary/ChangeStatusAdmin'
+import { useLeaveCommentAdminMutation } from '../../../../shared/api/DiaryAdmin/DiaryAdminRequest.ts'
 
 interface DiaryListItemProps {
   item: UserDiary
@@ -16,7 +15,7 @@ interface DiaryListItemProps {
 type MessageCredentials = { value: string; id: string }
 
 const { Text } = Typography
-export const DiaryListItem = ({
+export const DiaryAdminListItem = ({
   item: {
     id,
     createdAt,
@@ -24,17 +23,15 @@ export const DiaryListItem = ({
     diaryState,
     studentFullName,
     curatorFullName,
-    taskReportTable,
     studentCharacteristics,
     companyName,
     orderNumber,
     comments,
     workName,
-    planTable,
   },
   refetchCallback,
 }: DiaryListItemProps) => {
-  const [trigger] = useLeaveCommentDiaryMutation()
+  const [trigger] = useLeaveCommentAdminMutation()
 
   const handleSendComments = ({ value }: MessageCredentials) => {
     trigger({ diaryId: id, text: value }).then(() => refetchCallback())
@@ -58,6 +55,11 @@ export const DiaryListItem = ({
             </Tag>
             <span>{`${WorkModeMapper[diaryType]} ${workName ? workName : ''} : ${year}`}</span>
           </Flex>
+          <ChangeStatusAdmin
+            progressStatus={diaryState}
+            diaryId={id}
+            refetchCallback={refetchCallback}
+          />
           <Flex gap={'1rem'}>
             <CommentsModal
               comments={comments}
@@ -65,21 +67,6 @@ export const DiaryListItem = ({
               id={id}
               sendMessageCallback={handleSendComments}
             />
-            <EditInformation>
-              <EditInformation.General
-                diaryId={id}
-                orderNumber={orderNumber ? orderNumber : null}
-                curatorFullName={curatorFullName ? curatorFullName : null}
-                studentCharacteristics={studentCharacteristics}
-              />
-              {!(diaryType === DiaryTypeEnum.DEFAULT) && (
-                <EditInformation.Additional
-                  diaryId={id}
-                  workName={workName ? workName : null}
-                  planTable={planTable ? planTable : null}
-                />
-              )}
-            </EditInformation>
           </Flex>
         </span>
       }
@@ -94,18 +81,6 @@ export const DiaryListItem = ({
         <FieldLabel title={'Приказ - '}>{orderNumber ? orderNumber : 'Не добавлено'}</FieldLabel>
         <FieldLabel title={'Характеристика: '}>
           {studentCharacteristics ? <Button icon={<DownloadOutlined />} /> : <Text>{'Не добавлено'}</Text>}
-        </FieldLabel>
-        {!(diaryType === DiaryTypeEnum.DEFAULT) && planTable && (
-          <FieldLabel title={'Планирование работы:'}>{planTable}</FieldLabel>
-        )}
-        <FieldLabel title={'Таблица с здачами:'}>
-          {taskReportTable ? (
-            <Button icon={<DownloadOutlined />} />
-          ) : (
-            <Upload>
-              <Button icon={<UploadOutlined />}>Загрузить</Button>
-            </Upload>
-          )}
         </FieldLabel>
       </Flex>
     </Card>

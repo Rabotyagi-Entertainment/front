@@ -1,78 +1,68 @@
-import { Button, Empty, Form, Input, Layout, List, Space, Spin } from 'antd'
+import { Empty, Flex, Form, Input, Layout, List, Space } from 'antd'
 import { useLazyGetStudentsParametersQuery } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
-import { SearchOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { StudentItem } from '../../../entities/ui/StudentItem'
-import { UserUploadingModal } from '../../../Features/userUploading'
 import { ExportCurrentInternship } from '../../../Features/diary/exportCurrentInternship'
+import { useForm } from 'antd/es/form/Form'
+import { baseUrl } from '../../../shared/api/static/authConfig.ts'
+import { UploadingModal } from '../../../Features/userUploading'
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 
 const Lists = () => {
-  const [search, setSearch] = useState<string>('')
-  const [company, setCompany] = useState<string>('')
-  const [group, setGroup] = useState<string>('')
-  const [trigger, { data, isFetching }] = useLazyGetStudentsParametersQuery()
+  const [form] = useForm()
+  const breakPoint = useBreakpoint()
+  const [trigger, { data }] = useLazyGetStudentsParametersQuery()
 
   useEffect(() => {
-    trigger({ search: search, company: company, group: group })
+    trigger(form.getFieldsValue())
   }, [])
 
   const handleSearch = () => {
-    trigger({ search: search, company: company, group: group })
-  }
-
-  if (isFetching) {
-    return <Spin />
+    trigger(form.getFieldsValue())
   }
 
   return (
     <>
       <Layout>
-        <Space>
+        <Flex vertical>
           <Form
+            form={form}
             layout={'vertical'}
-            style={{ display: 'flex', gap: '1rem', alignItems: 'end', flexWrap: 'wrap' }}
+            onChange={handleSearch}
+            initialValues={{ company: '', search: '', group: '' }}
+            style={{ display: 'flex', gap: `${breakPoint.sm ? '1rem' : 0}`, alignItems: 'end', flexWrap: 'wrap' }}
           >
             <Form.Item
               label='Поиск'
               name='search'
             >
-              <Input
-                value={search}
-                onChange={e => setSearch(e.currentTarget.value)}
-              />
+              <Input />
             </Form.Item>
             <Form.Item
               label='Компания'
               name='company'
             >
-              <Input
-                value={company}
-                onChange={e => setCompany(e.currentTarget.value)}
-              />
+              <Input />
             </Form.Item>
             <Form.Item
               label='Группа'
               name='group'
             >
-              <Input
-                value={group}
-                onChange={e => setGroup(e.currentTarget.value)}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                onClick={handleSearch}
-                type={'primary'}
-                htmlType={'submit'}
-                icon={<SearchOutlined />}
-              >
-                {'Поиск'}
-              </Button>
+              <Input />
             </Form.Item>
           </Form>
-          <UserUploadingModal />
-          <ExportCurrentInternship />
-        </Space>
+          <Flex
+            gap={'1rem'}
+            wrap
+            style={{ marginBottom: '1rem' }}
+          >
+            <UploadingModal
+              title={'Загрузить список студентов'}
+              url={baseUrl + 'api/auth/students/table'}
+            />
+            <ExportCurrentInternship />
+          </Flex>
+        </Flex>
         {data! && data.length > 0 ? (
           <List bordered>
             {data!.map(item => (

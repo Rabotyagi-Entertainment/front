@@ -53,6 +53,8 @@ export const authApi = createApi({
         headers: {
           accept: '*/*',
           'Content-Type': 'multipart/form-data',
+          Referer: 'http://localhost:5173/admin/lists',
+          Origin: 'http://localhost:5173',
         },
       }),
     }),

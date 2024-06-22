@@ -1,4 +1,4 @@
-import { Button, Form, FormProps, Input, Layout, Typography } from 'antd'
+import { Button, Flex, Form, FormProps, Input, Layout, Typography } from 'antd'
 import { useLoginMutation } from '../../../shared/api/Auth/AuthRequest.ts'
 import { LoginPayload } from '../../../shared/api/Auth/AuthDataSource.ts'
 import { useNavigate } from 'react-router-dom'
@@ -12,9 +12,12 @@ const AdminAuth = () => {
 
   const onFinish = (values: FieldType) => {
     authTrigger(values).then(response => {
-      // @ts-ignore
-      localStorage.setItem('userToken', response.error.data.toString())
-      navigate('/admin/lists')
+      if (response.error) {
+        alert(`Error: ${response.error}`)
+      } else {
+        localStorage.setItem('userToken', response!.data.jwt)
+        navigate('/admin/lists')
+      }
     })
   }
 
@@ -24,40 +27,46 @@ const AdminAuth = () => {
 
   return (
     <>
-      <Layout style={{ padding: '1rem' }}>
+      <Layout style={{ padding: '1rem', height: '100%', margin: '0 auto' }}>
         <Title>{'Админ панель'}</Title>
-        <Form
-          name='basic'
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
+        <Flex
+          vertical
+          justify={'center'}
         >
-          <Form.Item<FieldType>
-            label='Логин'
-            name='telegramUserName'
-            rules={[{ required: true, message: 'Введите логин!' }]}
+          <Form
+            style={{ minWidth: '300px' }}
+            name='basic'
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item<FieldType>
-            label='Пароль'
-            name='password'
-            rules={[{ required: true, message: 'Введите пароль!' }]}
-          >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              loading={result.isLoading}
-              type='primary'
-              htmlType='submit'
+            <Form.Item<FieldType>
+              label='Логин'
+              name='telegramUserName'
+              rules={[{ required: true, message: 'Введите логин!' }]}
             >
-              Войти
-            </Button>
-          </Form.Item>
-        </Form>
+              <Input />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label='Пароль'
+              name='password'
+              rules={[{ required: true, message: 'Введите пароль!' }]}
+            >
+              <Input.Password />
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                loading={result.isLoading}
+                type='primary'
+                htmlType='submit'
+              >
+                Войти
+              </Button>
+            </Form.Item>
+          </Form>
+        </Flex>
       </Layout>
     </>
   )

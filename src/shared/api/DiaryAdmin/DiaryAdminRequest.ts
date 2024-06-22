@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { baseUrl } from '../static/authConfig.ts'
 import {
+  DiaryStateChangeStatusPayload,
+  DiaryStateChangeStatusResponse,
   ExportStudentsPayload,
   ExportStudentsResponse,
   LeaveCommentPracticeDiaryPayload,
@@ -26,10 +28,21 @@ export const DiaryAdmin = createApi({
     ExportStudentsTable: builder.query<ExportStudentsResponse, ExportStudentsPayload>({
       query: () => `students/table`,
     }),
-    LeaveComment: builder.query<LeaveCommentPracticeDiaryResponse, LeaveCommentPracticeDiaryPayload>({
-      query: ({ diaryId }) => `${diaryId}/comment`,
+    LeaveCommentAdmin: builder.mutation<LeaveCommentPracticeDiaryResponse, LeaveCommentPracticeDiaryPayload>({
+      query: ({ diaryId, text }) => ({
+        url: `${diaryId}/comment`,
+        text: text,
+        method: 'POST',
+      }),
+    }),
+    DiaryStateChange: builder.mutation<DiaryStateChangeStatusResponse, DiaryStateChangeStatusPayload>({
+      query: ({ diaryId, payload }) => ({
+        url: `${diaryId}/status`,
+        method: 'PUT',
+        body: payload,
+      }),
     }),
   }),
 })
 
-export const { useLeaveCommentQuery, useExportStudentsTableQuery } = DiaryAdmin
+export const { useLeaveCommentAdminMutation, useExportStudentsTableQuery, useDiaryStateChangeMutation } = DiaryAdmin

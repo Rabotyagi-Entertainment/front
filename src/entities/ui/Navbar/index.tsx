@@ -1,20 +1,26 @@
-import { Typography } from 'antd'
+import { Flex, Layout, Typography } from 'antd'
+import { RolesEnum } from '../../../shared/types/user/RolesEnum.ts'
+import { NavLink } from 'react-router-dom'
+import { RouteType } from '../../../app/routes/RouteType.ts'
+import { ProfileResponse } from '../../../shared/api/Auth/AuthDataSource.ts'
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 
 const { Title } = Typography
 
-export const Navbar = () => {
-  // const { data } = useGetProfileQuery({})
+interface NavbarProps {
+  profile: ProfileResponse | undefined
+}
+
+export const Navbar = ({ profile }: NavbarProps) => {
+  const breakPoint = useBreakpoint()
 
   return (
-    <div style={{ width: '100%' }}>
-      <span
-        style={{
-          padding: '1rem',
-          display: 'flex',
-          gap: '1rem',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
+    <Layout>
+      <Flex
+        style={{ padding: '1rem' }}
+        gap={'1rem'}
+        align={'center'}
+        justify={'space-between'}
       >
         <Title
           style={{ lineHeight: 'normal', marginTop: 0, marginBottom: 0 }}
@@ -22,21 +28,25 @@ export const Navbar = () => {
         >
           Добро пожаловать в систему стажировок
         </Title>
-        {/*<span style={{ display: 'flex', gap: '1rem' }}>*/}
-        {/*  {data! && data.roles.includes(RolesEnum.ADMIN) ? (*/}
-        {/*    <>*/}
-        {/*      <NavLink to={RouteType.ADMIN_INTERNSHIP}>{'Стажировки'}</NavLink>*/}
-        {/*      <NavLink to={RouteType.ADMIN_DIARY}>{'Дневники'}</NavLink>*/}
-        {/*      <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>*/}
-        {/*    </>*/}
-        {/*  ) : (*/}
-        {/*    <>*/}
-        {/*      <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'Собеседования'}</NavLink>*/}
-        {/*      <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'Стажировки'}</NavLink>*/}
-        {/*    </>*/}
-        {/*  )}*/}
-        {/*</span>*/}
-      </span>
-    </div>
+        <Flex gap={'1rem'}>
+          {profile! && profile.roles.includes(RolesEnum.ADMIN) ? (
+            <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>
+          ) : (
+            <>
+              <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'Собеседования'}</NavLink>
+              <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'Стажировки'}</NavLink>
+            </>
+          )}
+        </Flex>
+        {breakPoint.lg && (
+          <Title
+            style={{ lineHeight: 'normal', marginTop: 0, marginBottom: 0 }}
+            level={5}
+          >
+            {profile!.fullName}
+          </Title>
+        )}
+      </Flex>
+    </Layout>
   )
 }

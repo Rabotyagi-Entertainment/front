@@ -1,29 +1,45 @@
-import { useState } from 'react'
-import { Button, Modal, Upload, UploadFile } from 'antd'
+import { JSX, useState } from 'react'
+import { Button, Modal, Upload, UploadFile, UploadProps } from 'antd'
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons'
-import { useLoadStudentsMutation } from '../../shared/api/Auth/AuthRequest.ts'
 
-export const UserUploadingModal = () => {
-  const [trigger] = useLoadStudentsMutation()
+interface UploadingProps {
+  title: string
+  url: string
+  buttonStyle?: 'primary' | 'default'
+  icon?: JSX.Element
+}
+
+export const UploadingModal = ({ title, url, buttonStyle = 'primary', icon = <PlusOutlined /> }: UploadingProps) => {
   const [show, setShow] = useState<boolean>(false)
-  const [file, setFile] = useState<UploadFile<File> | null>(null)
-
   const showModal = () => {
     setShow(true)
   }
 
-  const handleOk = () => {
-    if (file) {
-      trigger({ file: file.originFileObj as File })
-    }
+  const [fileList, setFileList] = useState<UploadFile[]>()
+
+  const handleChange: UploadProps['onChange'] = info => {
+    setFileList(info.fileList)
   }
-  const customRequest = async ({ file, onSuccess, onError }: any) => {
-    try {
-      await trigger({ file: file })
-      onSuccess(null, file)
-    } catch (error) {
-      onError(error)
-    }
+
+  const customRequest = async (options: any) => {
+    const { file } = options
+    console.log(file)
+    const uploadFile = new FormData()
+    uploadFile.append('file', file)
+
+    console.log(uploadFile)
+
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('userToken')}`,
+        // 'Content-Type': 'multipart/form-data',
+        Origin: 'http://localhost:5173',
+        Referer: 'http://localhost:5173/admin/lists',
+      },
+      method: 'POST',
+      body: uploadFile,
+    }).then(res => res.json())
+    alert(JSON.stringify(`${res.message}, status: ${res.status}`))
   }
 
   const handleCancel = () => {
@@ -33,29 +49,24 @@ export const UserUploadingModal = () => {
   return (
     <>
       <Button
-        type={'primary'}
-        icon={<PlusOutlined />}
+        type={buttonStyle}
+        icon={icon}
         onClick={showModal}
       >
-        {'Загрузить студентов'}
+        {title}
       </Button>
       <Modal
-        title='Создание дневника практики'
+        title={title}
         open={show}
         onCancel={handleCancel}
-        footer={[
-          <Button
-            type='primary'
-            onClick={handleOk}
-          >
-            Создать
-          </Button>,
-        ]}
+        footer={false}
       >
         <Upload
+          accept={'.xls'}
+          maxCount={1}
           customRequest={customRequest}
-          onChange={e => setFile(e.file)}
-          fileList={file ? [file] : []}
+          fileList={fileList}
+          onChange={handleChange}
         >
           <Button icon={<UploadOutlined />}>{'Файл .xls'}</Button>
         </Upload>

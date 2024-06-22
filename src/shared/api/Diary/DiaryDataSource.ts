@@ -46,7 +46,7 @@ export interface EditDiaryAdditionalInformationResponse {}
 
 export interface LoadTaskReportPayload {
   diaryId: string
-  file: File
+  file: FormData
 }
 export interface LoadTaskReportResponse {}
 
