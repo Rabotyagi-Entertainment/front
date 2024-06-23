@@ -23,11 +23,8 @@ export const UploadingModal = ({ title, url, buttonStyle = 'primary', icon = <Pl
 
   const customRequest = async (options: any) => {
     const { file } = options
-    console.log(file)
     const uploadFile = new FormData()
     uploadFile.append('file', file)
-
-    console.log(uploadFile)
 
     const res = await fetch(url, {
       headers: {
