@@ -13,11 +13,9 @@ const Auth = () => {
   }
 
   return (
-    <>
-      <Layout style={{ padding: '1rem' }}>
-        {!isOnboarding ? <AuthorizationForm successCallback={successAuthorizationCallback} /> : <Startup />}
-      </Layout>
-    </>
+    <Layout style={{ padding: '1rem', margin: '0 auto' }}>
+      {!isOnboarding ? <AuthorizationForm successCallback={successAuthorizationCallback} /> : <Startup />}
+    </Layout>
   )
 }
 

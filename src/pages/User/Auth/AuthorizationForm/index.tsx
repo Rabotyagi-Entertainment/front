@@ -1,8 +1,10 @@
-import { Button, Form, FormProps, Input, Select, Spin } from 'antd'
+import { Button, Form, FormProps, Input, Select, Spin, Typography } from 'antd'
 import { useGetStudentsQuery, useRegisterMutation } from '../../../../shared/api/Auth/AuthRequest.ts'
 import { GetLoadedStudentsResponse, RegisterPayload } from '../../../../shared/api/Auth/AuthDataSource.ts'
 
 type FieldType = RegisterPayload
+
+const { Title } = Typography
 
 interface AuthorizationFormProps {
   successCallback: () => void
@@ -48,7 +50,9 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
   return (
     <>
+      <Title>{'Регистрация'}</Title>
       <Form
+        style={{ minWidth: 300, width: '100%' }}
         name='register'
         initialValues={{ password: '', fullName: '', email: '', telegramUserName: '' }}
         onFinish={onFinish}

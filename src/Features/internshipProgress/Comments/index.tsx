@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Button, Empty, List, Modal } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { CommentItem } from '../../../entities/ui/CommentItem'
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
+import { CommentOutlined } from '@ant-design/icons'
 
 type messageCredentials = { value: string; id: string }
 
@@ -14,6 +16,7 @@ interface CommentsModalType {
 }
 
 export const CommentsModal = ({ comments, title, id, sendMessageCallback }: CommentsModalType) => {
+  const breakPoint = useBreakpoint()
   const [value, setValue] = useState<string>('')
   const [show, setShow] = useState<boolean>(false)
 
@@ -36,7 +39,7 @@ export const CommentsModal = ({ comments, title, id, sendMessageCallback }: Comm
 
   return (
     <>
-      <Button onClick={showModal}>{title}</Button>
+      <Button onClick={showModal}>{breakPoint.md ? title : <CommentOutlined />}</Button>
       <Modal
         title={title}
         open={show}

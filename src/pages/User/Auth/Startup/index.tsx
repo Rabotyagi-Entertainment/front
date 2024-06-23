@@ -1,10 +1,12 @@
-import { Button, Form, Input, InputNumber, Layout, Select, Space, Typography } from 'antd'
+import { Button, Flex, Form, Input, InputNumber, Layout, Select, Typography } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { useGetCompaniesQuery } from '../../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 import { GetCompaniesResponse } from '../../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
 import { useAddCompanyMutation, useRemoveCompanyMutation } from '../../../../shared/api/Internship/InternshipRequest.ts'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'antd/es/form/Form'
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
+import { useState } from 'react'
 
 const { Title } = Typography
 
@@ -16,25 +18,34 @@ const createOptions = (data: GetCompaniesResponse) => {
 }
 
 export const Startup = () => {
+  const breakPoint = useBreakpoint()
   const [form] = useForm()
   const { data } = useGetCompaniesQuery({})
   const [trigger] = useAddCompanyMutation()
   const [triggerRemove] = useRemoveCompanyMutation()
   const navigate = useNavigate()
+  const [isCanSkip, SetSkip] = useState<boolean>(false)
 
   const onAddCompany = () => {
     const length = form.getFieldsValue().companies.length - 2
-    if (length >= 0) {
-      const { companyId, priority, additionalInfo } = form.getFieldsValue().companies[length]
-      trigger({
-        companyId: companyId,
-        payload: { status: 'Default', additionalInfo: additionalInfo, priority: priority },
-      })
+    if (form.getFieldsValue().companies) {
+      SetSkip(true)
+      if (length >= 0) {
+        const { companyId, priority, additionalInfo } = form.getFieldsValue().companies[length]
+        trigger({
+          companyId: companyId,
+          payload: { status: 'Default', additionalInfo: additionalInfo, priority: priority },
+        })
+      }
     }
   }
 
   const onDeleteCompany = (name: number) => {
-    const { companyId } = form.getFieldsValue().companies[name]
+    const companies = form.getFieldsValue().companies
+    if (companies.length < 1) {
+      SetSkip(false)
+    }
+    const { companyId } = companies[name]
     triggerRemove({ companyId: companyId })
   }
 
@@ -64,10 +75,21 @@ export const Startup = () => {
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, ...restField }) => (
-                <Space key={key}>
+                <Flex
+                  key={key}
+                  vertical={breakPoint.xs}
+                  align={breakPoint.xs ? 'start' : 'center'}
+                  style={{
+                    padding: '1rem 0.5rem',
+                    border: '1px solid gray',
+                    borderRadius: '0.5rem',
+                    marginBottom: '0.5rem',
+                  }}
+                >
                   <Form.Item
                     {...restField}
                     name={[name, 'companyId']}
+                    label={'Компания'}
                     rules={[{ required: true, message: 'Выберите компанию или удалите поле' }]}
                   >
                     <Select
@@ -89,21 +111,27 @@ export const Startup = () => {
                   <Form.Item
                     {...restField}
                     name={[name, 'additionalInfo']}
+                    label={'Комментарий'}
                   >
-                    <Input placeholder={'Комментарий'} />
+                    <Input />
                   </Form.Item>
-                  <MinusCircleOutlined
+                  <Button
+                    type={'default'}
+                    style={{ backgroundColor: 'orange', color: 'white' }}
+                    icon={<MinusCircleOutlined size={100} />}
                     onClick={() => {
                       onDeleteCompany(name)
                       remove(name)
                     }}
-                  />
-                </Space>
+                  >
+                    {'Удалить'}
+                  </Button>
+                </Flex>
               ))}
               <Form.Item>
                 <Button
+                  style={{ marginTop: '1rem' }}
                   type='dashed'
-                  disabled={fields.length < 1}
                   onClick={() => {
                     add()
                     onAddCompany()
@@ -121,6 +149,7 @@ export const Startup = () => {
           <Button
             type='primary'
             onClick={onFinish}
+            disabled={!isCanSkip}
           >
             Подтвердить
           </Button>
