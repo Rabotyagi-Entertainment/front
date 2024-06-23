@@ -1,4 +1,4 @@
-import { Table, TableProps } from 'antd'
+import { Space, Table, TableProps } from 'antd'
 import { GetStudentInternshipProgressResponse } from '../../../shared/api/Internship/InternshipDataSource.ts'
 import { CommentsModal } from '../../../Features/internshipProgress/Comments'
 import { StatusModal } from '../../../Features/internshipProgress/StatusEdit'
@@ -53,12 +53,14 @@ export const InternshipProgressItem = ({ dataSource, refetchCallback }: Internsh
       dataIndex: 'comments',
       key: 'comments',
       render: (_, record) => (
-        <CommentsModal
-          sendMessageCallback={handleSendMessage}
-          id={record.companyId}
-          comments={record.comments}
-          title={record.comments.length > 0 ? record.comments.length : 'Комментарии'}
-        />
+        <Space style={{ width: '100%', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+          <CommentsModal
+            sendMessageCallback={handleSendMessage}
+            id={record.companyId}
+            comments={record.comments}
+            title={record.comments.length > 0 ? record.comments.length : 'Комментарии'}
+          />
+        </Space>
       ),
     },
     {
@@ -79,6 +81,8 @@ export const InternshipProgressItem = ({ dataSource, refetchCallback }: Internsh
 
   return (
     <Table
+      style={{ width: '100%' }}
+      scroll={{ x: 300 }}
       dataSource={createDataSource(dataSource)}
       columns={columns}
     />

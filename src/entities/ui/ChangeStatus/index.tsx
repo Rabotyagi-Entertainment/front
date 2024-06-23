@@ -15,7 +15,6 @@ export const ChangeStatus = ({ fetchCallback, options, defaultValue }: ChangeSta
   return (
     <Space>
       <Select
-        style={{ width: '17rem' }}
         defaultValue={defaultValue}
         onChange={handleChange}
         options={options}

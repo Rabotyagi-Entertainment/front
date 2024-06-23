@@ -48,6 +48,7 @@ export const InternshipItem = ({ companies }: InternshipItemProps) => {
 
   return (
     <Table
+      scroll={{ x: 300 }}
       dataSource={createDataSource(companies!)}
       columns={columns}
     />

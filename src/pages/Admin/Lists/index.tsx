@@ -1,4 +1,4 @@
-import { Empty, Flex, Form, Input, Layout, List, Space } from 'antd'
+import { Empty, Flex, Form, Input, Layout, List } from 'antd'
 import { useLazyGetStudentsParametersQuery } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 import { useEffect } from 'react'
 import { StudentItem } from '../../../entities/ui/StudentItem'

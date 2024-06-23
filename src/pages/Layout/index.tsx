@@ -7,7 +7,7 @@ const MainLayout = () => {
   const { data, isLoading } = useGetProfileQuery({})
 
   return (
-    <div>
+    <div style={{ width: '100%', height: '100%' }}>
       {!isLoading ? (
         <>
           <Navbar profile={data} />
