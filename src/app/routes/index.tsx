@@ -44,11 +44,13 @@ const createAdminRoutes = (isAuth: boolean) => {
 }
 
 interface RouterProps {
-  isAuth: boolean
   role: RolesEnum
 }
 
-export const Router = ({ role, isAuth }: RouterProps) => {
-  const customRouter = useRoutes(role.includes(RolesEnum.ADMIN) ? createAdminRoutes(isAuth) : createRoutes(isAuth))
+export const Router = ({ role }: RouterProps) => {
+  const isAuth = localStorage.getItem('userToken')
+  const customRouter = useRoutes(
+    role && role.includes(RolesEnum.ADMIN) ? createAdminRoutes(!!isAuth) : createRoutes(!!isAuth)
+  )
   return <Suspense fallback={<Spin />}>{customRouter}</Suspense>
 }

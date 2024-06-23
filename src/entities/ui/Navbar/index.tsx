@@ -58,7 +58,7 @@ export const Navbar = ({ profile }: NavbarProps) => {
             </Button>
           </Dropdown>
         )}
-        {breakPoint.lg && (
+        {breakPoint.lg && profile && (
           <Title
             style={{ lineHeight: 'normal', marginTop: 0, marginBottom: 0 }}
             level={5}

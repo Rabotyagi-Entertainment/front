@@ -9,7 +9,7 @@ const MainLayout = () => {
 
   return (
     <Suspense fallback={<Spin />}>
-      <Navbar profile={data} />
+      <Navbar profile={data!} />
       <div style={{ padding: '1rem' }}>
         <Outlet />
       </div>
