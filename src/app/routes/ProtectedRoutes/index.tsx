@@ -38,6 +38,9 @@ export const ProtectedRoutes: Array<IRoute> = [
       },
     ],
   },
+]
+
+export const ProtectedAdminRoutes: Array<IRoute> = [
   {
     path: `${RouteType.ADMIN_INTERNSHIP}/:id`,
     title: 'Администрирование стажировки',
