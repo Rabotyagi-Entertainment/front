@@ -12,6 +12,8 @@ import {
   GetStudentInternshipResponse,
   InternshipProgressStatusPayload,
   InternshipProgressStatusResponse,
+  LeaveCommentInternshipProgressPayload,
+  LeaveCommentInternshipProgressResponse,
   RemoveCompanyUserPayload,
   RemoveCompanyUserResponse,
   SetCompanyStatusPayload,
@@ -100,6 +102,13 @@ export const internshipApi = createApi({
     GetStudentInternships: builder.query<GetStudentInternshipResponse, GetStudentInternshipPayload>({
       query: () => `internship/student`,
     }),
+    LeaveCommentUser: builder.mutation<LeaveCommentInternshipProgressResponse, LeaveCommentInternshipProgressPayload>({
+      query: ({ text, companyId }) => ({
+        url: `progress/${companyId}/status`,
+        method: 'POST',
+        body: { text: text },
+      }),
+    }),
   }),
 })
 
@@ -114,4 +123,5 @@ export const {
   useLazyGetStudentInternshipProgressQuery,
   useRemoveCompanyMutation,
   useGetStudentInternshipsQuery,
+  useLeaveCommentUserMutation,
 } = internshipApi

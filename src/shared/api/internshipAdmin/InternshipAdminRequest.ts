@@ -69,7 +69,7 @@ export const internshipAdminApi = createApi({
       query: ({ text, internshipProgressId }) => ({
         url: `admin/internship/progress/${internshipProgressId}`,
         method: 'POST',
-        body: text,
+        body: { text: text },
       }),
     }),
   }),
@@ -84,5 +84,6 @@ export const {
   useLazyGetStudentsParametersQuery,
   useGetStudentsStatusesQuery,
   useGetStudentsAdminInternshipsProgressQuery,
+  useLazyGetStudentsAdminInternshipsQuery,
   useGetStudentsAdminInternshipsQuery,
 } = internshipAdminApi

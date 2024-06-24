@@ -5,13 +5,18 @@ import { AdditionalInformation } from './AdditionalInformation'
 import { Button, Modal } from 'antd'
 import { EditOutlined } from '@ant-design/icons'
 
-interface EditInformationProps extends PropsWithChildren {}
+interface EditInformationProps extends PropsWithChildren {
+  refetchCallback: () => void
+}
 type EditInformationNotation = {
   General: typeof GeneralInformation
   Additional: typeof AdditionalInformation
 }
 
-export const EditInformation: React.FC<EditInformationProps> & EditInformationNotation = ({ children }) => {
+export const EditInformation: React.FC<EditInformationProps> & EditInformationNotation = ({
+  children,
+  refetchCallback,
+}) => {
   const [show, setShow] = useState<boolean>(false)
 
   const showModal = () => {
@@ -19,10 +24,12 @@ export const EditInformation: React.FC<EditInformationProps> & EditInformationNo
   }
 
   const handleOk = () => {
+    refetchCallback()
     setShow(false)
   }
 
   const handleCancel = () => {
+    refetchCallback()
     setShow(false)
   }
 
@@ -42,7 +49,7 @@ export const EditInformation: React.FC<EditInformationProps> & EditInformationNo
             type='primary'
             onClick={handleOk}
           >
-            Создать
+            Редактировать
           </Button>,
         ]}
       >

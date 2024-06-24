@@ -6,13 +6,12 @@ import { FieldLabel } from '../../../../shared/ui/FieldLabel'
 import { CommentsModal } from '../../../../Features/internshipProgress/Comments'
 import { ChangeStatusAdmin } from '../../../../Features/diary/ChangeStatusAdmin'
 import { useLeaveCommentAdminMutation } from '../../../../shared/api/DiaryAdmin/DiaryAdminRequest.ts'
+import { CommentCredentials } from '../../../../shared/types/comment/CommentCredentials.ts'
 
 interface DiaryListItemProps {
   item: UserDiary
   refetchCallback: () => void
 }
-
-type MessageCredentials = { value: string; id: string }
 
 const { Text } = Typography
 export const DiaryAdminListItem = ({
@@ -33,8 +32,8 @@ export const DiaryAdminListItem = ({
 }: DiaryListItemProps) => {
   const [trigger] = useLeaveCommentAdminMutation()
 
-  const handleSendComments = ({ value }: MessageCredentials) => {
-    trigger({ diaryId: id, text: value }).then(() => refetchCallback())
+  const handleSendComments = ({ text }: CommentCredentials) => {
+    trigger({ diaryId: id, text: text }).then(() => refetchCallback())
   }
 
   const year = `${createdAt.split('-')[0]}`

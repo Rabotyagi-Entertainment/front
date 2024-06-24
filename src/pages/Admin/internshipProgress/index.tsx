@@ -1,13 +1,15 @@
 import { useParams } from 'react-router-dom'
 import {
   useCommentMutation,
-  useGetStudentsAdminInternshipsQuery,
+  useLazyGetStudentsAdminInternshipsQuery,
 } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 import { Spin, Table, TableProps, Tag, Typography } from 'antd'
 import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
 import { GetAdminStudentInternshipResponse } from '../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
 import { CommentsModal } from '../../../Features/internshipProgress/Comments'
 import { InternshipProgressEnum } from '../../../shared/types/internshipProgress/InternshipProgressEnum.ts'
+import { CommentCredentials } from '../../../shared/types/comment/CommentCredentials.ts'
+import { useEffect } from 'react'
 
 const { Title } = Typography
 
@@ -29,11 +31,20 @@ const createDataSource = (dataSource: GetAdminStudentInternshipResponse) => {
 export const InternshipProgressAdmin = () => {
   const { id } = useParams()
 
-  const { data, isLoading } = useGetStudentsAdminInternshipsQuery({ studentId: id! })
-  const [trigger] = useCommentMutation()
+  useEffect(() => {
+    trigger({ studentId: id! })
+  }, [])
 
-  const handleSendMessage = ({ value, id }: { value: string; id: string }) => {
-    trigger({ internshipProgressId: id, text: value })
+  const [trigger, { data, isLoading }] = useLazyGetStudentsAdminInternshipsQuery()
+  const [mutationTrigger] = useCommentMutation()
+
+  const handleSendMessage = ({ text, senderId }: CommentCredentials) => {
+    mutationTrigger({ internshipProgressId: senderId, text: text }).then(response => {
+      if (response.error) {
+      } else {
+        trigger({ studentId: id! })
+      }
+    })
   }
 
   const columns: TableProps['columns'] = [
@@ -89,10 +100,12 @@ export const InternshipProgressAdmin = () => {
   return (
     <>
       <Title>{'Адмистрирование собеседований'}</Title>
-      <Table
-        dataSource={createDataSource(data!)}
-        columns={columns}
-      />
+      {!isLoading && data && (
+        <Table
+          dataSource={createDataSource(data!)}
+          columns={columns}
+        />
+      )}
     </>
   )
 }

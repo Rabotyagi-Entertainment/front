@@ -2,7 +2,6 @@ import { Empty, Flex, Form, Input, Layout, List } from 'antd'
 import { useLazyGetStudentsParametersQuery } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 import { useEffect } from 'react'
 import { StudentItem } from '../../../entities/ui/StudentItem'
-import { ExportCurrentInternship } from '../../../Features/diary/exportCurrentInternship'
 import { useForm } from 'antd/es/form/Form'
 import { baseUrl } from '../../../shared/api/static/authConfig.ts'
 import { UploadingModal } from '../../../Features/userUploading'
@@ -60,7 +59,6 @@ const Lists = () => {
               title={'Загрузить список студентов'}
               url={baseUrl + 'api/auth/students/table'}
             />
-            <ExportCurrentInternship />
           </Flex>
         </Flex>
         {data! && data.length > 0 ? (

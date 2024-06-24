@@ -84,3 +84,6 @@ export type InternshipResponse = {
   endedAt?: string
 }[]
 export interface GetStudentInternshipResponse extends InternshipResponse {}
+
+export type LeaveCommentInternshipProgressPayload = { companyId: string; text: string }
+export type LeaveCommentInternshipProgressResponse = {}
