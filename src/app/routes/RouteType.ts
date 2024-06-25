@@ -6,6 +6,6 @@ export enum RouteType {
   ADMIN_INTERNSHIP = '/admin/internship',
   ADMIN_INTERNSHIP_PROGRESS = '/admin/internship/progress',
   ADMIN_LISTS = '/admin/lists',
-  ADMIN_LOGIN = '/admin/login',
-  STUDENT_LOGIN = '/login',
+  LOGIN = '/login',
+  REGISTER = '/register',
 }

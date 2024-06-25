@@ -1,6 +1,8 @@
-import { Button, Form, FormProps, Input, Select, Spin, Typography } from 'antd'
+import { Button, Flex, Form, FormProps, Input, Select, Spin, Typography } from 'antd'
 import { useGetStudentsQuery, useRegisterMutation } from '../../../../shared/api/Auth/AuthRequest.ts'
 import { GetLoadedStudentsResponse, RegisterPayload } from '../../../../shared/api/Auth/AuthDataSource.ts'
+import { NavLink } from 'react-router-dom'
+import { RouteType } from '../../../../app/routes/RouteType.ts'
 
 type FieldType = RegisterPayload
 
@@ -20,7 +22,7 @@ const createOptions = (data: GetLoadedStudentsResponse): { value: string; label:
 }
 
 export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) => {
-  const [authTrigger] = useRegisterMutation()
+  const [authTrigger, { isLoading }] = useRegisterMutation()
   const { data, isFetching } = useGetStudentsQuery({})
 
   const onFinish = (values: FieldType) => {
@@ -39,19 +41,16 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
   }
 
   if (isFetching) {
-    return (
-      <div style={{ inset: 0, position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Spin size={'large'} />
-      </div>
-    )
+    return <Spin size={'large'} />
   }
 
   const filterOption = (input: string, option?: { label: string; value: string }) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
   return (
     <>
-      <Title>{'Регистрация'}</Title>
+      <Title style={{ textAlign: 'center' }}>{'Регистрация'}</Title>
       <Form
+        layout={'vertical'}
         style={{ minWidth: 300, width: '100%' }}
         name='register'
         initialValues={{ password: '', fullName: '', email: '', telegramUserName: '' }}
@@ -100,12 +99,22 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
         </Form.Item>
 
         <Form.Item>
-          <Button
-            type='primary'
-            htmlType='submit'
-          >
-            Зарегистрироваться
-          </Button>
+          <Form.Item>
+            <Flex
+              gap={'1rem'}
+              align={'center'}
+              justify={'center'}
+            >
+              <Button
+                loading={isLoading}
+                type='primary'
+                htmlType='submit'
+              >
+                Зарегистрироваться
+              </Button>
+              <NavLink to={RouteType.LOGIN}>{'Войти'}</NavLink>
+            </Flex>
+          </Form.Item>
         </Form.Item>
       </Form>
     </>

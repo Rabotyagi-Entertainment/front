@@ -47,7 +47,7 @@ export const internshipAdminApi = createApi({
     }),
     GetStudentsParameters: builder.query<GetStudentsListSearchableResponse, GetStudentsListSearchablePayload>({
       query: ({ search, company, group }) => {
-        return `admin/internship/students?search=${search}&company=${company}&group=${group}`
+        return `admin/internship/students?${search ? `search=${search}&` : ''}${company ? `company=${company}&` : ''}${group ? `group=${group}&` : ''}`
       },
     }),
     ExportStudentTable: builder.query<GetStudentsTableResponse, GetStudentsTablePayload>({
