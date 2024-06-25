@@ -23,6 +23,6 @@ export const statusInternshipProgressMapper = {
   [InternshipProgressEnum.SUBMITTED_RESUME]: { text: 'Отправил резюме', color: 'yellow' },
   [InternshipProgressEnum.IN_SELECTION_PROGRESS]: { text: 'Отказ', color: 'orange' },
   [InternshipProgressEnum.RECEIVED_OFFER]: { text: 'Собеседование', color: 'blue' },
-  [InternshipProgressEnum.REJECT]: { text: 'Отправил резюме', color: 'red' },
+  [InternshipProgressEnum.REJECT]: { text: 'Отказ', color: 'red' },
   [InternshipProgressEnum.ACCEPT_OFFER]: { text: 'Получил оффер', color: 'green' },
 }

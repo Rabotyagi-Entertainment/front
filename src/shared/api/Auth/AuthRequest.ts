@@ -8,6 +8,8 @@ import {
   ProfileResponse,
   RegisterPayload,
   RegisterResponse,
+  SendMessageDeadlinePayload,
+  SendMessageDeadlineResponse,
   StudentsFileUploadPayload,
   StudentsFileUploadResponse,
 } from './AuthDataSource.ts'
@@ -61,6 +63,13 @@ export const authApi = createApi({
     GetStudents: builder.query<GetLoadedStudentsResponse, GetLoadedStudentsPayload>({
       query: _ => `students/table`,
     }),
+    SendDeadlineMessage: builder.mutation<SendMessageDeadlineResponse, SendMessageDeadlinePayload>({
+      query: body => ({
+        url: `deadline/message`,
+        body: body,
+        method: 'POST',
+      }),
+    }),
   }),
 })
 
@@ -70,4 +79,5 @@ export const {
   useLoadStudentsMutation,
   useRegisterMutation,
   useLoginMutation,
+  useSendDeadlineMessageMutation,
 } = authApi

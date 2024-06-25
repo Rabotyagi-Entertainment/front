@@ -36,3 +36,10 @@ export interface StudentsFileUploadResponse {}
 
 export interface GetLoadedStudentsPayload {}
 export type GetLoadedStudentsResponse = User[]
+
+export type SendMessageDeadlinePayload = {
+  courseNumber: number
+  optionalMessage: string
+  deadlineTime: 'string'
+}
+export type SendMessageDeadlineResponse = {}
