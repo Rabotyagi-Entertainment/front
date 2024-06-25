@@ -7,6 +7,7 @@ import { useLeaveCommentUserMutation } from '../../../shared/api/Internship/Inte
 
 interface InternshipProgressItemProps {
   dataSource: GetStudentInternshipProgressResponse | []
+  acceptedCompany?: string
   refetchCallback: () => void
 }
 
@@ -24,7 +25,11 @@ const createDataSource = (dataSource: GetStudentInternshipProgressResponse) => {
   })
 }
 
-export const InternshipProgressItem = ({ dataSource, refetchCallback }: InternshipProgressItemProps) => {
+export const InternshipProgressItem = ({
+  dataSource,
+  refetchCallback,
+  acceptedCompany,
+}: InternshipProgressItemProps) => {
   const [trigger] = useLeaveCommentUserMutation()
 
   const handleSendMessage = ({ text, senderId }: CommentCredentials) => {
@@ -69,11 +74,15 @@ export const InternshipProgressItem = ({ dataSource, refetchCallback }: Internsh
       key: 'progressStatus',
       render: (_, record) => {
         return (
-          <StatusModal
-            refetchCallback={refetchCallback}
-            companyId={record.companyId}
-            progressStatus={record.progressStatus}
-          />
+          <>
+            {(!acceptedCompany || record.companyId === acceptedCompany) && (
+              <StatusModal
+                refetchCallback={refetchCallback}
+                companyId={record.companyId}
+                progressStatus={record.progressStatus}
+              />
+            )}
+          </>
         )
       },
     },

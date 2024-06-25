@@ -77,6 +77,7 @@ export const internshipAdminApi = createApi({
 
 export const {
   useGetCompaniesQuery,
+  useLazyGetCompaniesQuery,
   useCreateCompanyMutation,
   useCommentMutation,
   useExportStudentTableQuery,

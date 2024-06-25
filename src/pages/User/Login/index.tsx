@@ -1,8 +1,12 @@
-import { Button, Flex, Form, FormProps, Input, Layout, Typography } from 'antd'
+import { Button, Flex, Form, Input, Layout, notification, Typography } from 'antd'
 import { useLoginMutation } from '../../../shared/api/Auth/AuthRequest.ts'
 import { LoginPayload } from '../../../shared/api/Auth/AuthDataSource.ts'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { RouteType } from '../../../app/routes/RouteType.ts'
+import { jwtDecode } from 'jwt-decode'
+import { RolesEnum } from '../../../shared/types/user/RolesEnum.ts'
+import { NotificationType } from '../../../shared/types/notification'
+import { CloseCircleOutlined, CheckCircleOutlined, InfoOutlined } from '@ant-design/icons'
 
 type FieldType = LoginPayload
 
@@ -11,25 +15,53 @@ const AdminAuth = () => {
   const [authTrigger, result] = useLoginMutation()
   const navigate = useNavigate()
 
-  const onFinish = (values: FieldType) => {
-    authTrigger(values).then(response => {
-      if (response.error) {
-        alert(`Error: ${response.error}`)
-      } else {
-        localStorage.setItem('userToken', response!.data.jwt)
-        navigate('/admin/lists')
-      }
+  const [api, contextHolder] = notification.useNotification()
+
+  const openNotification = ({ type, message, content }: NotificationType) => {
+    api.open({
+      message: message,
+      description: content,
+      placement: 'topRight',
+      type: type,
+      icon:
+        type === 'error' ? (
+          <CloseCircleOutlined style={{ color: 'red' }} />
+        ) : type === 'success' ? (
+          <CheckCircleOutlined />
+        ) : (
+          <InfoOutlined />
+        ),
     })
   }
 
-  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = errorInfo => {
-    alert(`Ошибка: ${errorInfo}`)
+  const onFinish = (values: FieldType) => {
+    authTrigger(values).then(response => {
+      if (response.error) {
+        openNotification({
+          type: 'error',
+          // @ts-ignore
+          message: `Ошибка - ${response.error.status}`,
+          // @ts-ignore
+          content: response.error.data.Message,
+        })
+      } else {
+        const token = response!.data.jwt
+        const role: { 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role': RolesEnum } = jwtDecode(token)
+        localStorage.setItem('userToken', token)
+        navigate(
+          role['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === RolesEnum.ADMIN
+            ? RouteType.ADMIN_LISTS
+            : RouteType.STUDENT_INTERNSHIP
+        )
+      }
+    })
   }
 
   return (
     <Layout
       style={{ padding: '1rem', height: '100%', margin: '0 auto', backgroundColor: 'white', borderRadius: '1rem' }}
     >
+      {contextHolder}
       <Title style={{ textAlign: 'center' }}>{'Авторизация'}</Title>
       <Flex
         vertical
@@ -38,10 +70,9 @@ const AdminAuth = () => {
         <Form
           layout={'vertical'}
           style={{ minWidth: '300px' }}
-          name='basic'
-          initialValues={{ remember: true }}
+          name='loginForm'
+          initialValues={{ telegramUserName: '', password: '' }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
         >
           <Form.Item<FieldType>
             label='Логин'
