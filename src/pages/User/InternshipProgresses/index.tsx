@@ -1,4 +1,4 @@
-import { Flex, Layout, Spin, Typography } from 'antd'
+import { Button, Flex, Layout, Spin, Tooltip, Typography } from 'antd'
 
 import { InternshipProgressItem } from '../../../entities'
 import { useEffect } from 'react'
@@ -11,6 +11,7 @@ import {
 } from '../../../shared'
 
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
+import { PlusOutlined } from '@ant-design/icons'
 
 const { Title } = Typography
 
@@ -55,11 +56,20 @@ export const InternshipProgressStudent = () => {
         >
           {'Собеседования'}
         </Title>
-        {data! && !findAcceptedOffer(data!) && (
+        {data! && !findAcceptedOffer(data!) ? (
           <CreateModal
             refetchCallback={() => trigger({})}
             selectedCompanies={selectedCompanies(data!)}
           />
+        ) : (
+          <Tooltip title={'У вас уже есть активная стажировка'}>
+            <Button
+              disabled
+              type={'primary'}
+            >
+              <PlusOutlined />
+            </Button>
+          </Tooltip>
         )}
       </Flex>
       {data! ? (

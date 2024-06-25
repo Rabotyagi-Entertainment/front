@@ -5,12 +5,12 @@ import {
   Input,
   InputRef,
   Layout,
-  Popover,
   Space,
   Table,
   TableColumnType,
   TableProps,
   Tag,
+  Tooltip,
 } from 'antd'
 import { useLazyGetStudentsParametersQuery } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 import { useEffect, useRef } from 'react'
@@ -131,14 +131,9 @@ const Lists = () => {
             {record.company.length > 0 ? (
               record.company.map(item => {
                 return (
-                  <Popover
-                    placement='topLeft'
-                    title={'Статус'}
-                    content={
-                      <Tag color={statusInternshipProgressMapper[item.status].color}>
-                        {statusInternshipProgressMapper[item.status].text}
-                      </Tag>
-                    }
+                  <Tooltip
+                    color={statusInternshipProgressMapper[item.status].color}
+                    title={statusInternshipProgressMapper[item.status].text}
                   >
                     <Tag
                       style={{ cursor: 'pointer' }}
@@ -146,7 +141,7 @@ const Lists = () => {
                     >
                       {item.name}
                     </Tag>
-                  </Popover>
+                  </Tooltip>
                 )
               })
             ) : (

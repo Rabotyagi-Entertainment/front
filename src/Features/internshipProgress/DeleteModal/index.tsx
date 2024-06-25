@@ -1,17 +1,30 @@
-import { Button, Modal, Typography } from 'antd'
-import { DeleteOutlined } from '@ant-design/icons'
+import { Button, Modal, notification, Typography } from 'antd'
+import { CloseCircleOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useState } from 'react'
-import { useRemoveCompanyMutation } from '../../../shared'
+import { NotificationType, useRemoveCompanyMutation } from '../../../shared'
 
 type DeleteModalProps = {
   companyId: string
+  refetchCallback: () => void
 }
 const { Text } = Typography
 
-export const DeleteModal = ({ companyId }: DeleteModalProps) => {
+export const DeleteModal = ({ companyId, refetchCallback }: DeleteModalProps) => {
   const [show, setShow] = useState<boolean>(false)
 
   const [trigger] = useRemoveCompanyMutation()
+
+  const [api, contextHolder] = notification.useNotification()
+
+  const openNotification = ({ type, message, content }: NotificationType) => {
+    api.open({
+      message: message,
+      description: content,
+      placement: 'topRight',
+      type: type,
+      icon: <CloseCircleOutlined style={{ color: 'red' }} />,
+    })
+  }
 
   const showModal = () => {
     setShow(true)
@@ -19,8 +32,18 @@ export const DeleteModal = ({ companyId }: DeleteModalProps) => {
 
   const handleOk = () => {
     trigger({ companyId: companyId }).then(response => {
-      alert(response)
-      setShow(false)
+      if (!response.error) {
+        refetchCallback()
+        setShow(false)
+      } else {
+        openNotification({
+          type: 'error',
+          //@ts-ignore
+          message: `Ошибка - ${response.error.status}`,
+          //@ts-ignore
+          content: response.error.data.Message,
+        })
+      }
     })
   }
 
@@ -30,6 +53,7 @@ export const DeleteModal = ({ companyId }: DeleteModalProps) => {
 
   return (
     <>
+      {contextHolder}
       <Button
         ghost
         onClick={showModal}

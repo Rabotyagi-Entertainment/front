@@ -90,7 +90,16 @@ export const InternshipProgressItem = ({
       dataIndex: 'actionDelete',
       key: 'actionDelete',
       render: (_, record) => {
-        return <>{acceptedCompany !== record.companyId && <DeleteModal companyId={record.companyId} />}</>
+        return (
+          <>
+            {acceptedCompany !== record.companyId && (
+              <DeleteModal
+                refetchCallback={refetchCallback}
+                companyId={record.companyId}
+              />
+            )}
+          </>
+        )
       },
     },
   ]
