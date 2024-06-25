@@ -1,7 +1,6 @@
-import { InternshipProgressEnum } from '../../../shared/types/internshipProgress/InternshipProgressEnum.ts'
-import { useChangeStatusMutation } from '../../../shared/api/Internship/InternshipRequest.ts'
+import { useChangeStatusMutation, InternshipProgressEnum } from '../../../shared'
 import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
-import { ChangeStatus } from '../../../entities/ui/ChangeStatus'
+import { ChangeStatus } from '../../../entities'
 import { OptionProps } from 'antd/es/mentions'
 
 const options: OptionProps['option'] = [

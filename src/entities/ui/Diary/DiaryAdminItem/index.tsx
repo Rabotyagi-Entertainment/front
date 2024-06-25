@@ -1,12 +1,8 @@
 import { Button, Card, Flex, Tag, Typography } from 'antd'
-import { UserDiary } from '../../../../shared/types/diary/UserDiary.ts'
 import { DownloadOutlined } from '@ant-design/icons'
 import { DiaryStatusMapper, WorkModeMapper } from '../../../../shared/library/utils/utils.ts'
-import { FieldLabel } from '../../../../shared/ui/FieldLabel'
-import { CommentsModal } from '../../../../Features/internshipProgress/Comments'
-import { ChangeStatusAdmin } from '../../../../Features/diary/ChangeStatusAdmin'
-import { useLeaveCommentAdminMutation } from '../../../../shared/api/DiaryAdmin/DiaryAdminRequest.ts'
-import { CommentCredentials } from '../../../../shared/types/comment/CommentCredentials.ts'
+import { ChangeStatusAdmin, CommentsModal } from '../../../../Features'
+import { MessageCredential, UserDiary, FieldLabel, useLeaveCommentAdminMutation } from '../../../../shared'
 
 interface DiaryListItemProps {
   item: UserDiary
@@ -32,7 +28,7 @@ export const DiaryAdminListItem = ({
 }: DiaryListItemProps) => {
   const [trigger] = useLeaveCommentAdminMutation()
 
-  const handleSendComments = ({ text }: CommentCredentials) => {
+  const handleSendComments = ({ text }: MessageCredential) => {
     trigger({ diaryId: id, text: text }).then(() => refetchCallback())
   }
 

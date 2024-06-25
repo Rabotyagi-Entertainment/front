@@ -1,6 +1,6 @@
 import { Layout, Typography } from 'antd'
-import { useGetStudentInternshipsQuery } from '../../../shared/api/Internship/InternshipRequest.ts'
-import { InternshipItem } from '../../../entities/ui/IntershipItem'
+import { useGetStudentInternshipsQuery } from '../../../shared'
+import { InternshipItem } from '../../../entities'
 
 const { Title } = Typography
 

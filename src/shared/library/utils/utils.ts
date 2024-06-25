@@ -1,6 +1,4 @@
-import { DiaryTypeEnum } from '../../types/diary/DiaryTypeEnum.ts'
-import { InternshipProgressEnum } from '../../types/internshipProgress/InternshipProgressEnum.ts'
-import { DiaryStateTypeEnum } from '../../types/diary/DiaryStateTypeEnum.ts'
+import { DiaryTypeEnum, InternshipProgressEnum, DiaryStateTypeEnum } from '../../types'
 
 export const DiaryStatusMapper = {
   [DiaryStateTypeEnum.DRAFT]: { text: 'Черновик', color: 'gray' },
@@ -21,8 +19,8 @@ export const WorkModeMapper = {
 export const statusInternshipProgressMapper = {
   [InternshipProgressEnum.DEFAULT]: { text: 'Не начат', color: 'gray' },
   [InternshipProgressEnum.SUBMITTED_RESUME]: { text: 'Отправил резюме', color: 'yellow' },
-  [InternshipProgressEnum.IN_SELECTION_PROGRESS]: { text: 'Отказ', color: 'orange' },
-  [InternshipProgressEnum.RECEIVED_OFFER]: { text: 'Собеседование', color: 'blue' },
+  [InternshipProgressEnum.IN_SELECTION_PROGRESS]: { text: 'Собеседование', color: 'orange' },
+  [InternshipProgressEnum.RECEIVED_OFFER]: { text: 'Получил оффер', color: 'blue' },
   [InternshipProgressEnum.REJECT]: { text: 'Отказ', color: 'red' },
-  [InternshipProgressEnum.ACCEPT_OFFER]: { text: 'Получил оффер', color: 'green' },
+  [InternshipProgressEnum.ACCEPT_OFFER]: { text: 'Принял оффер', color: 'green' },
 }

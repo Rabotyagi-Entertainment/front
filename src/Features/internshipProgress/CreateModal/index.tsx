@@ -2,11 +2,9 @@ import { useState } from 'react'
 import { Button, Form, Input, InputNumber, Modal, Select } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useForm } from 'antd/es/form/Form'
-import { useAddCompanyMutation } from '../../../shared/api/Internship/InternshipRequest.ts'
 import { useLazyGetCompaniesQuery } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 import { GetCompaniesResponse } from '../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
-import { InternshipCompanyType } from '../../../shared/types/Company'
-import { InternshipProgressEnum } from '../../../shared/types/internshipProgress/InternshipProgressEnum.ts'
+import { InternshipProgressEnum, InternshipCompanyType, useAddCompanyMutation } from '../../../shared'
 
 type FormFields = {
   priority: number

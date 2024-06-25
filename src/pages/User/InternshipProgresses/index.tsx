@@ -1,11 +1,15 @@
 import { Flex, Layout, Spin, Typography } from 'antd'
-import { useLazyGetStudentInternshipProgressQuery } from '../../../shared/api/Internship/InternshipRequest.ts'
-import { InternshipProgressItem } from '../../../entities/ui/InternshipProgressItem'
+
+import { InternshipProgressItem } from '../../../entities'
 import { useEffect } from 'react'
-import { CreateModal } from '../../../Features/internshipProgress/CreateModal'
+import { CreateModal } from '../../../Features'
 import { InternshipProgressResponse } from '../../../shared/api/Internship/InternshipDataSource.ts'
-import { InternshipCompanyType } from '../../../shared/types/Company'
-import { InternshipProgressEnum } from '../../../shared/types/internshipProgress/InternshipProgressEnum.ts'
+import {
+  InternshipCompanyType,
+  InternshipProgressEnum,
+  useLazyGetStudentInternshipProgressQuery,
+} from '../../../shared'
+
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 
 const { Title } = Typography

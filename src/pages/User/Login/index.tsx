@@ -1,11 +1,9 @@
 import { Button, Flex, Form, Input, Layout, notification, Typography } from 'antd'
-import { useLoginMutation } from '../../../shared/api/Auth/AuthRequest.ts'
 import { LoginPayload } from '../../../shared/api/Auth/AuthDataSource.ts'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { RouteType } from '../../../app/routes/RouteType.ts'
 import { jwtDecode } from 'jwt-decode'
-import { RolesEnum } from '../../../shared/types/user/RolesEnum.ts'
-import { NotificationType } from '../../../shared/types/notification'
+import { RolesEnum, useLoginMutation, NotificationType } from '../../../shared'
 import { CloseCircleOutlined, CheckCircleOutlined, InfoOutlined } from '@ant-design/icons'
 
 type FieldType = LoginPayload

@@ -1,9 +1,8 @@
 import { Table, TableProps } from 'antd'
 import { GetStudentInternshipProgressResponse } from '../../../shared/api/Internship/InternshipDataSource.ts'
-import { CommentsModal } from '../../../Features/internshipProgress/Comments'
-import { StatusModal } from '../../../Features/internshipProgress/StatusEdit'
-import { CommentCredentials } from '../../../shared/types/comment/CommentCredentials.ts'
-import { useLeaveCommentUserMutation } from '../../../shared/api/Internship/InternshipRequest.ts'
+import { CommentsModal, StatusModal } from '../../../Features'
+import { useLeaveCommentUserMutation, MessageCredential } from '../../../shared'
+import { DeleteModal } from '../../../Features'
 
 interface InternshipProgressItemProps {
   dataSource: GetStudentInternshipProgressResponse | []
@@ -32,7 +31,7 @@ export const InternshipProgressItem = ({
 }: InternshipProgressItemProps) => {
   const [trigger] = useLeaveCommentUserMutation()
 
-  const handleSendMessage = ({ text, senderId }: CommentCredentials) => {
+  const handleSendMessage = ({ text, senderId }: MessageCredential) => {
     trigger({ companyId: senderId, text: text }).then(response => {
       if (!response.error) {
         refetchCallback()
@@ -84,6 +83,14 @@ export const InternshipProgressItem = ({
             )}
           </>
         )
+      },
+    },
+    {
+      title: 'Удаление',
+      dataIndex: 'actionDelete',
+      key: 'actionDelete',
+      render: (_, record) => {
+        return <>{acceptedCompany !== record.companyId && <DeleteModal companyId={record.companyId} />}</>
       },
     },
   ]
