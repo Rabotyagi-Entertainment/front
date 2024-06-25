@@ -5,6 +5,7 @@ import { RouteType } from '../../../app/routes/RouteType.ts'
 import { ProfileResponse } from '../../../shared/api/Auth/AuthDataSource.ts'
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 import { MenuOutlined } from '@ant-design/icons'
+import { BrbModal } from '../../../Features/Brb'
 
 const { Title } = Typography
 
@@ -20,6 +21,17 @@ const studentMenu: MenuProps['items'] = [
   {
     key: '2',
     label: <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'Стажировки'}</NavLink>,
+  },
+]
+
+const adminMenu: MenuProps['items'] = [
+  {
+    key: '1',
+    label: <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>,
+  },
+  {
+    key: '2',
+    label: <BrbModal />,
   },
 ]
 
@@ -41,9 +53,15 @@ export const Navbar = ({ profile }: NavbarProps) => {
           Система стажировок
         </Title>
         {breakPoint.lg ? (
-          <Flex gap={'1rem'}>
+          <Flex
+            gap={'1rem'}
+            align={'center'}
+          >
             {profile! && profile.roles.includes(RolesEnum.ADMIN) ? (
-              <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>
+              <>
+                <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>
+                <BrbModal />
+              </>
             ) : (
               <>
                 <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'Собеседования'}</NavLink>
@@ -52,7 +70,7 @@ export const Navbar = ({ profile }: NavbarProps) => {
             )}
           </Flex>
         ) : (
-          <Dropdown menu={{ items: studentMenu }}>
+          <Dropdown menu={{ items: profile! && profile.roles.includes(RolesEnum.ADMIN) ? adminMenu : studentMenu }}>
             <Button type={'primary'}>
               <MenuOutlined />
             </Button>
