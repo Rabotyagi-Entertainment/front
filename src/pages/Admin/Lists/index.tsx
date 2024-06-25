@@ -19,7 +19,7 @@ import { NavLink } from 'react-router-dom'
 import { CodeOutlined, ExportOutlined, SearchOutlined } from '@ant-design/icons'
 import { RouteType } from '../../../app/routes/RouteType.ts'
 import { GetStudentsListSearchableResponse } from '../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
-import { CurrentCompanyType, InternshipCompanyType } from '../../../shared/types/Company'
+import { CurrentCompanyType, InternshipCompanyType } from '../../../shared'
 import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
 
 type DataType = {
