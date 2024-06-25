@@ -1,6 +1,5 @@
-import { PracticeDiary } from '../../../entities/types/practiceDiary.ts'
-import { CommentType } from '../../types/internship/Comment.ts'
-import { InternshipProgressEnum } from '../../types/internshipProgress/InternshipProgressEnum.ts'
+import { PracticeDiary } from '../../../entities'
+import { CommentType, InternshipProgressEnum } from '../../types'
 
 type AddCompany = {
   priority: number

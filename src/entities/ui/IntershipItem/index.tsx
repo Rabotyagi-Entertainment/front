@@ -41,7 +41,7 @@ export const InternshipItem = ({ companies }: InternshipItemProps) => {
       dataIndex: 'diaries',
       key: 'diaries',
       render: (_, record) => {
-        return <NavLink to={`/student/diary/${record.internshipId}`}>{'Дневники -->'}</NavLink>
+        return <NavLink to={`/student/diary/${record.internshipId}`}>{'Дневники'}</NavLink>
       },
     },
   ]

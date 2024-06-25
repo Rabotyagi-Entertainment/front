@@ -6,9 +6,8 @@ import {
 import { Spin, Table, TableProps, Tag, Typography } from 'antd'
 import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
 import { GetAdminStudentInternshipResponse } from '../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
-import { CommentsModal } from '../../../Features/internshipProgress/Comments'
-import { InternshipProgressEnum } from '../../../shared/types/internshipProgress/InternshipProgressEnum.ts'
-import { CommentCredentials } from '../../../shared/types/comment/CommentCredentials.ts'
+import { CommentsModal } from '../../../Features'
+import { InternshipProgressEnum, MessageCredential } from '../../../shared'
 import { useEffect } from 'react'
 
 const { Title } = Typography
@@ -33,12 +32,12 @@ export const InternshipProgressAdmin = () => {
 
   useEffect(() => {
     trigger({ studentId: id! })
-  }, [])
+  }, [id])
 
   const [trigger, { data, isLoading }] = useLazyGetStudentsAdminInternshipsQuery()
   const [mutationTrigger] = useCommentMutation()
 
-  const handleSendMessage = ({ text, senderId }: CommentCredentials) => {
+  const handleSendMessage = ({ text, senderId }: MessageCredential) => {
     mutationTrigger({ internshipProgressId: senderId, text: text }).then(response => {
       if (response.error) {
       } else {

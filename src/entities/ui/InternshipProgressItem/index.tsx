@@ -1,12 +1,12 @@
 import { Table, TableProps } from 'antd'
 import { GetStudentInternshipProgressResponse } from '../../../shared/api/Internship/InternshipDataSource.ts'
-import { CommentsModal } from '../../../Features/internshipProgress/Comments'
-import { StatusModal } from '../../../Features/internshipProgress/StatusEdit'
-import { CommentCredentials } from '../../../shared/types/comment/CommentCredentials.ts'
-import { useLeaveCommentUserMutation } from '../../../shared/api/Internship/InternshipRequest.ts'
+import { CommentsModal, StatusModal } from '../../../Features'
+import { useLeaveCommentUserMutation, MessageCredential } from '../../../shared'
+import { DeleteModal } from '../../../Features'
 
 interface InternshipProgressItemProps {
   dataSource: GetStudentInternshipProgressResponse | []
+  acceptedCompany?: string
   refetchCallback: () => void
 }
 
@@ -24,10 +24,14 @@ const createDataSource = (dataSource: GetStudentInternshipProgressResponse) => {
   })
 }
 
-export const InternshipProgressItem = ({ dataSource, refetchCallback }: InternshipProgressItemProps) => {
+export const InternshipProgressItem = ({
+  dataSource,
+  refetchCallback,
+  acceptedCompany,
+}: InternshipProgressItemProps) => {
   const [trigger] = useLeaveCommentUserMutation()
 
-  const handleSendMessage = ({ text, senderId }: CommentCredentials) => {
+  const handleSendMessage = ({ text, senderId }: MessageCredential) => {
     trigger({ companyId: senderId, text: text }).then(response => {
       if (!response.error) {
         refetchCallback()
@@ -69,12 +73,24 @@ export const InternshipProgressItem = ({ dataSource, refetchCallback }: Internsh
       key: 'progressStatus',
       render: (_, record) => {
         return (
-          <StatusModal
-            refetchCallback={refetchCallback}
-            companyId={record.companyId}
-            progressStatus={record.progressStatus}
-          />
+          <>
+            {(!acceptedCompany || record.companyId === acceptedCompany) && (
+              <StatusModal
+                refetchCallback={refetchCallback}
+                companyId={record.companyId}
+                progressStatus={record.progressStatus}
+              />
+            )}
+          </>
         )
+      },
+    },
+    {
+      title: 'Удаление',
+      dataIndex: 'actionDelete',
+      key: 'actionDelete',
+      render: (_, record) => {
+        return <>{acceptedCompany !== record.companyId && <DeleteModal companyId={record.companyId} />}</>
       },
     },
   ]

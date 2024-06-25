@@ -1,4 +1,4 @@
-import { InternshipProgressEnum } from '../internshipProgress/InternshipProgressEnum.ts'
+import { Index } from '../internshipProgress'
 
 export type CurrentCompanyType = {
   id: string
@@ -10,5 +10,5 @@ export type CurrentCompanyType = {
 export type InternshipCompanyType = {
   id: string
   name: string
-  status: InternshipProgressEnum
+  status: Index
 }

@@ -1,15 +1,15 @@
 import { Card, Flex, Tag, Typography } from 'antd'
-import { UserDiary } from '../../../../shared/types/diary/UserDiary.ts'
+import {
+  UserDiary,
+  DiaryTypeEnum,
+  FieldLabel,
+  baseUrl,
+  MessageCredential,
+  useLeaveCommentDiaryMutation,
+} from '../../../../shared'
 import { DiaryStatusMapper, WorkModeMapper } from '../../../../shared/library/utils/utils.ts'
-import { EditInformation } from '../../../../Features/diary/Editable'
-import { DiaryTypeEnum } from '../../../../shared/types/diary/DiaryTypeEnum.ts'
-import { FieldLabel } from '../../../../shared/ui/FieldLabel'
-import { CommentsModal } from '../../../../Features/internshipProgress/Comments'
-import { useLeaveCommentDiaryMutation } from '../../../../shared/api/Diary/DiaryRequest.ts'
+import { CommentsModal, DownloadButton, EditInformation } from '../../../../Features'
 import { TaskReportUploading } from '../../TaskReportUploading'
-import { CommentCredentials } from '../../../../shared/types/comment/CommentCredentials.ts'
-import { DownloadButton } from '../../../../Features/diary/DownloadDiary'
-import { baseUrl } from '../../../../shared/api/static/authConfig.ts'
 
 interface DiaryListItemProps {
   item: UserDiary
@@ -37,7 +37,7 @@ export const DiaryListItem = ({
 }: DiaryListItemProps) => {
   const [trigger] = useLeaveCommentDiaryMutation()
 
-  const handleSendComments = ({ text }: CommentCredentials) => {
+  const handleSendComments = ({ text }: MessageCredential) => {
     trigger({ diaryId: id, text: text }).then(() => refetchCallback())
   }
 
