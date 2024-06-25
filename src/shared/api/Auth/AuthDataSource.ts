@@ -7,13 +7,17 @@ export interface RegisterPayload {
   password: string
   fullName: string
 }
-export interface RegisterResponse {}
+export interface RegisterResponse {
+  jwt: string
+}
 
 export interface LoginPayload {
   telegramUserName: string
   password: string
 }
-export interface LoginResponse {}
+export interface LoginResponse {
+  jwt: string
+}
 
 export interface ProfilePayload {}
 export interface ProfileResponse {
@@ -22,14 +26,20 @@ export interface ProfileResponse {
   email: string
   telegramUserName: string
   joinedAt: string
-  roles: RolesEnum[]
+  roles: RolesEnum
 }
 
 export interface StudentsFileUploadPayload {
-  file: File
+  file: FormData
 }
 export interface StudentsFileUploadResponse {}
 
 export interface GetLoadedStudentsPayload {}
-type StudentsLists = User[]
-export interface GetLoadedStudentsResponse extends StudentsLists {}
+export type GetLoadedStudentsResponse = User[]
+
+export type SendMessageDeadlinePayload = {
+  courseNumber: number
+  optionalMessage: string
+  deadlineTime: 'string'
+}
+export type SendMessageDeadlineResponse = {}

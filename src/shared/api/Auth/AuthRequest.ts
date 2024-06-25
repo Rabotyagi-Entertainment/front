@@ -8,6 +8,8 @@ import {
   ProfileResponse,
   RegisterPayload,
   RegisterResponse,
+  SendMessageDeadlinePayload,
+  SendMessageDeadlineResponse,
   StudentsFileUploadPayload,
   StudentsFileUploadResponse,
 } from './AuthDataSource.ts'
@@ -17,14 +19,12 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}api/auth/`,
-    mode: 'no-cors',
     prepareHeaders: headers => {
       const token = localStorage.getItem('userToken')
 
       if (token && !headers.has('Authorization')) {
         headers.set('Authorization', `Bearer ${token!}`)
       }
-      headers.set('Content-Type', 'application/json')
 
       return headers
     },
@@ -52,10 +52,23 @@ export const authApi = createApi({
         url: `students/table`,
         method: 'POST',
         body: data,
+        headers: {
+          accept: '*/*',
+          'Content-Type': 'multipart/form-data',
+          Referer: 'http://localhost:5173/admin/lists',
+          Origin: 'http://localhost:5173',
+        },
       }),
     }),
     GetStudents: builder.query<GetLoadedStudentsResponse, GetLoadedStudentsPayload>({
-      query: () => `students/table`,
+      query: _ => `students/table`,
+    }),
+    SendDeadlineMessage: builder.mutation<SendMessageDeadlineResponse, SendMessageDeadlinePayload>({
+      query: body => ({
+        url: `deadline/message`,
+        body: body,
+        method: 'POST',
+      }),
     }),
   }),
 })
@@ -66,4 +79,5 @@ export const {
   useLoadStudentsMutation,
   useRegisterMutation,
   useLoginMutation,
+  useSendDeadlineMessageMutation,
 } = authApi

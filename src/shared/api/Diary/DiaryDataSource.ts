@@ -1,15 +1,22 @@
-import { DiaryType } from '../../types/diary/Diary.ts'
+import { UserDiary } from '../../types/diary/UserDiary.ts'
+import { DiaryTypeEnum } from '../../types/diary/DiaryTypeEnum.ts'
+import { RolesEnum } from '../../types/user/RolesEnum.ts'
 
 export interface GetMyDiaryPayload {}
-type MyDiaryType = DiaryType[]
-export interface GetMyDiaryResponse extends MyDiaryType {}
+export type GetMyDiaryResponse = UserDiary[]
 
 export interface GetMyDiaryFilePayload {
   diaryId: string
 }
-export interface GetMyDiaryFileResponse {}
+export type GetMyDiaryFileResponse = string
 
-type GeneralInfoPayload = {
+export interface GetDiaryListPayload {
+  userId?: string
+  internshipId?: string
+}
+export type GetDiaryListResponse = UserDiary[]
+
+export type GeneralInfoPayload = {
   orderNumber: string
   orderDate: string
   curatorFullName: string
@@ -23,11 +30,11 @@ export interface EditDiaryGeneralInformationResponse {}
 
 export interface CreateDiaryPayload {
   internshipId: string
-  diaryType: DiaryType
+  diaryType: DiaryTypeEnum
 }
 export interface CreateDiaryResponse {}
 
-type AdditionalInfoPayload = {
+export type AdditionalInfoPayload = {
   workName: string
   planTable: string
 }
@@ -39,6 +46,16 @@ export interface EditDiaryAdditionalInformationResponse {}
 
 export interface LoadTaskReportPayload {
   diaryId: string
-  file: File
+  file: FormData
 }
 export interface LoadTaskReportResponse {}
+
+export interface LeaveCommentPayload {
+  diaryId: string
+  text: string
+}
+export interface LeaveCommentResponse {
+  text: string
+  author: string
+  roleType: RolesEnum
+}

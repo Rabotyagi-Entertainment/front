@@ -7,10 +7,12 @@ import {
   EditDiaryAdditionalInformationResponse,
   EditDiaryGeneralInformationPayload,
   EditDiaryGeneralInformationResponse,
+  GetDiaryListPayload,
+  GetDiaryListResponse,
   GetMyDiaryFilePayload,
   GetMyDiaryFileResponse,
-  GetMyDiaryPayload,
-  GetMyDiaryResponse,
+  LeaveCommentPayload,
+  LeaveCommentResponse,
   LoadTaskReportPayload,
   LoadTaskReportResponse,
 } from './DiaryDataSource.ts'
@@ -18,8 +20,7 @@ import {
 export const diaryApi = createApi({
   reducerPath: 'diaryApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${baseUrl}/diary/`,
-    mode: 'no-cors',
+    baseUrl: `${baseUrl}diary/`,
     prepareHeaders: headers => {
       const token = localStorage.getItem('userToken')
 
@@ -32,8 +33,9 @@ export const diaryApi = createApi({
     },
   }),
   endpoints: builder => ({
-    GetMyDiaries: builder.query<GetMyDiaryResponse, GetMyDiaryPayload>({
-      query: () => 'list',
+    GetDiariesList: builder.query<GetDiaryListResponse, GetDiaryListPayload>({
+      query: ({ userId, internshipId }) =>
+        `list?${userId ? `userId=${userId}` : ''}&${internshipId ? `internshipId=${internshipId}` : ''}`,
     }),
     GetMyDiaryFile: builder.query<GetMyDiaryFileResponse, GetMyDiaryFilePayload>({
       query: ({ diaryId }) => `${diaryId}`,
@@ -67,6 +69,13 @@ export const diaryApi = createApi({
         body: JSON.stringify(file),
       }),
     }),
+    LeaveCommentDiary: builder.mutation<LeaveCommentResponse, LeaveCommentPayload>({
+      query: ({ diaryId, text }) => ({
+        url: `${diaryId}/comment`,
+        method: 'POST',
+        body: { text: text },
+      }),
+    }),
   }),
 })
 
@@ -74,7 +83,10 @@ export const {
   useCreatePracticeDiaryMutation,
   useEditAdditionalInfoMutation,
   useEditGeneralInfoMutation,
-  useGetMyDiariesQuery,
+  useGetDiariesListQuery,
+  useLazyGetDiariesListQuery,
+  useLeaveCommentDiaryMutation,
   useGetMyDiaryFileQuery,
+  useLazyGetMyDiaryFileQuery,
   useLoadReportMutation,
 } = diaryApi

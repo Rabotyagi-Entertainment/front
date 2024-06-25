@@ -3,7 +3,7 @@ import { Router } from './routes'
 
 const App = () => {
   return (
-    <Layout>
+    <Layout style={{ width: '100%', height: '100%' }}>
       <Router />
     </Layout>
   )

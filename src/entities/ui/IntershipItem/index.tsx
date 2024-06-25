@@ -1,33 +1,56 @@
-import { Company } from '../../../shared/types/internship/Company.ts'
-import { Card, List, Typography } from 'antd'
-import { StatusEnum } from '../../../shared/types/internship/Status.ts'
+import { Table, TableProps } from 'antd'
+import { GetStudentInternshipResponse } from '../../../shared/api/Internship/InternshipDataSource.ts'
+import { NavLink } from 'react-router-dom'
 
 interface InternshipItemProps {
-  item: Company
-}
-const { Text } = Typography
-
-const statusMapper = {
-  [StatusEnum.CV]: 'Подал резюме',
-  [StatusEnum.REJECT]: 'Отказ',
-  [StatusEnum.OFFER]: 'Получил оффер',
-  [StatusEnum.MEETING]: 'Собеседование',
+  companies: GetStudentInternshipResponse
 }
 
-export const InternshipItem = ({
-  item: { internshipProgressId, companyName, comments, status },
-}: InternshipItemProps) => {
+const createDataSource = (dataSource: GetStudentInternshipResponse) => {
+  return dataSource!.map(item => {
+    return {
+      key: item.id,
+      internshipId: item.id,
+      company: item.company.name,
+      companyId: item.company.id,
+      startedAt: item.startedAt.split('T')[0],
+      endedAt: item.endedAt ? item.endedAt.split('T')[0] : 'По настоящее время',
+    }
+  })
+}
+
+export const InternshipItem = ({ companies }: InternshipItemProps) => {
+  const columns: TableProps['columns'] = [
+    {
+      title: 'Компания',
+      dataIndex: 'company',
+      key: 'company',
+    },
+    {
+      title: 'Начало',
+      dataIndex: 'startedAt',
+      key: 'startedAt',
+    },
+    {
+      title: 'Конец',
+      dataIndex: 'endedAt',
+      key: 'endedAt',
+    },
+    {
+      title: 'Дневники',
+      dataIndex: 'diaries',
+      key: 'diaries',
+      render: (_, record) => {
+        return <NavLink to={`/student/diary/${record.internshipId}`}>{'Дневники'}</NavLink>
+      },
+    },
+  ]
+
   return (
-    <Card
-      key={internshipProgressId}
-      title={companyName}
-    >
-      <Text>{`Статус - ${statusMapper[status]}`}</Text>
-      <List>
-        {comments.map((comment, number) => (
-          <Text key={number}>{`${comment.author} - ${comment.text}`}</Text>
-        ))}
-      </List>
-    </Card>
+    <Table
+      scroll={{ x: 300 }}
+      dataSource={createDataSource(companies!)}
+      columns={columns}
+    />
   )
 }
