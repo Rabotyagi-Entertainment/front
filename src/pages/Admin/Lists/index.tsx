@@ -36,7 +36,7 @@ const Lists = () => {
   const breakPoint = useBreakpoint()
   const [trigger, { data, isLoading }] = useLazyGetStudentsParametersQuery()
 
-  const columns: TableProps['columns'] = [
+  const columns: TableProps<DataType>['columns'] = [
     {
       title: 'ФИО',
       dataIndex: 'search',
