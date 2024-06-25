@@ -1,11 +1,11 @@
 import { Button, Dropdown, Flex, Layout, MenuProps, Typography } from 'antd'
-import { RolesEnum } from '../../../shared/types/user/RolesEnum.ts'
+import { RolesEnum } from '../../../shared'
 import { NavLink } from 'react-router-dom'
 import { RouteType } from '../../../app/routes/RouteType.ts'
 import { ProfileResponse } from '../../../shared/api/Auth/AuthDataSource.ts'
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 import { MenuOutlined } from '@ant-design/icons'
-import { BrbModal } from '../../../Features/Brb'
+import { BrbModal } from '../../../Features'
 
 const { Title } = Typography
 
@@ -13,7 +13,7 @@ interface NavbarProps {
   profile: ProfileResponse | undefined
 }
 
-const studentMenu: MenuProps['items'] = [
+const studentMenu = (name: string): MenuProps['items'] => [
   {
     key: '1',
     label: <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'Собеседования'}</NavLink>,
@@ -22,9 +22,13 @@ const studentMenu: MenuProps['items'] = [
     key: '2',
     label: <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'Стажировки'}</NavLink>,
   },
+  {
+    key: '3',
+    label: <NavLink to={'#'}>{name}</NavLink>,
+  },
 ]
 
-const adminMenu: MenuProps['items'] = [
+const adminMenu = (name: string): MenuProps['items'] => [
   {
     key: '1',
     label: <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>,
@@ -32,6 +36,10 @@ const adminMenu: MenuProps['items'] = [
   {
     key: '2',
     label: <BrbModal />,
+  },
+  {
+    key: '3',
+    label: <NavLink to={'#'}>{name}</NavLink>,
   },
 ]
 
@@ -70,7 +78,14 @@ export const Navbar = ({ profile }: NavbarProps) => {
             )}
           </Flex>
         ) : (
-          <Dropdown menu={{ items: profile! && profile.roles.includes(RolesEnum.ADMIN) ? adminMenu : studentMenu }}>
+          <Dropdown
+            menu={{
+              items:
+                profile! && profile.roles.includes(RolesEnum.ADMIN)
+                  ? adminMenu(profile?.fullName!)
+                  : studentMenu(profile?.fullName!),
+            }}
+          >
             <Button type={'primary'}>
               <MenuOutlined />
             </Button>
