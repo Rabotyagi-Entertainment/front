@@ -30,8 +30,8 @@ export const UploadingModal = ({ title, url, buttonStyle = 'primary', icon = <Pl
       headers: {
         Authorization: `Bearer ${localStorage.getItem('userToken')}`,
         // 'Content-Type': 'multipart/form-data',
-        Origin: 'http://localhost:5173',
-        Referer: 'http://localhost:5173/admin/lists',
+        Origin: 'https://deploy--clever-kleicha-19288a.netlify.app/',
+        Referer: 'https://deploy--clever-kleicha-19288a.netlify.app/admin/lists',
       },
       method: 'POST',
       body: uploadFile,
@@ -59,7 +59,7 @@ export const UploadingModal = ({ title, url, buttonStyle = 'primary', icon = <Pl
         footer={false}
       >
         <Upload
-          accept={'.xls'}
+          accept={'.xlsx'}
           maxCount={1}
           customRequest={customRequest}
           fileList={fileList}

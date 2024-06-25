@@ -6,17 +6,21 @@ import { Spin } from 'antd'
 import { RolesEnum } from '../../shared/types/user/RolesEnum.ts'
 
 const Auth = lazy(() => import('../../pages/User/Auth'))
-const AdminAuth = lazy(() => import('../../pages/Admin/Auth'))
+const Login = lazy(() => import('../../pages/User/Login'))
 const MainLayout = lazy(() => import('../../pages/Layout'))
 
 const createRoutes = (isAuth: boolean) => {
   return [
     {
-      element: isAuth ? <MainLayout /> : <Navigate to={RouteType.STUDENT_LOGIN} />,
+      element: isAuth ? <MainLayout /> : <Navigate to={RouteType.LOGIN} />,
       children: ProtectedRoutes,
     },
     {
-      path: RouteType.STUDENT_LOGIN,
+      path: RouteType.LOGIN,
+      element: <Login />,
+    },
+    {
+      path: RouteType.REGISTER,
       element: <Auth />,
     },
     {
@@ -29,12 +33,12 @@ const createRoutes = (isAuth: boolean) => {
 const createAdminRoutes = (isAuth: boolean) => {
   return [
     {
-      element: isAuth ? <MainLayout /> : <Navigate to={RouteType.ADMIN_LOGIN} />,
+      element: isAuth ? <MainLayout /> : <Navigate to={RouteType.LOGIN} />,
       children: ProtectedAdminRoutes,
     },
     {
-      path: RouteType.ADMIN_LOGIN,
-      element: <AdminAuth />,
+      path: RouteType.LOGIN,
+      element: <Login />,
     },
     {
       path: '*',

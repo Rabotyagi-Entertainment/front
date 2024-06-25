@@ -1,6 +1,5 @@
-import { Button, Card, Flex, Tag, Typography } from 'antd'
+import { Card, Flex, Tag, Typography } from 'antd'
 import { UserDiary } from '../../../../shared/types/diary/UserDiary.ts'
-import { DownloadOutlined } from '@ant-design/icons'
 import { DiaryStatusMapper, WorkModeMapper } from '../../../../shared/library/utils/utils.ts'
 import { EditInformation } from '../../../../Features/diary/Editable'
 import { DiaryTypeEnum } from '../../../../shared/types/diary/DiaryTypeEnum.ts'
@@ -8,13 +7,14 @@ import { FieldLabel } from '../../../../shared/ui/FieldLabel'
 import { CommentsModal } from '../../../../Features/internshipProgress/Comments'
 import { useLeaveCommentDiaryMutation } from '../../../../shared/api/Diary/DiaryRequest.ts'
 import { TaskReportUploading } from '../../TaskReportUploading'
+import { CommentCredentials } from '../../../../shared/types/comment/CommentCredentials.ts'
+import { DownloadButton } from '../../../../Features/diary/DownloadDiary'
+import { baseUrl } from '../../../../shared/api/static/authConfig.ts'
 
 interface DiaryListItemProps {
   item: UserDiary
   refetchCallback: () => void
 }
-
-type MessageCredentials = { value: string; id: string }
 
 const { Text } = Typography
 export const DiaryListItem = ({
@@ -37,8 +37,8 @@ export const DiaryListItem = ({
 }: DiaryListItemProps) => {
   const [trigger] = useLeaveCommentDiaryMutation()
 
-  const handleSendComments = ({ value }: MessageCredentials) => {
-    trigger({ diaryId: id, text: value }).then(() => refetchCallback())
+  const handleSendComments = ({ text }: CommentCredentials) => {
+    trigger({ diaryId: id, text: text }).then(() => refetchCallback())
   }
 
   const year = `${createdAt.split('-')[0]}`
@@ -66,7 +66,7 @@ export const DiaryListItem = ({
               id={id}
               sendMessageCallback={handleSendComments}
             />
-            <EditInformation>
+            <EditInformation refetchCallback={refetchCallback}>
               <EditInformation.General
                 diaryId={id}
                 orderNumber={orderNumber ? orderNumber : null}
@@ -81,6 +81,10 @@ export const DiaryListItem = ({
                 />
               )}
             </EditInformation>
+            <DownloadButton
+              link={`${baseUrl}diary/${id}`}
+              title={'Скачать файл'}
+            />
           </Flex>
         </span>
       }
@@ -93,14 +97,27 @@ export const DiaryListItem = ({
         <FieldLabel title={'Студент - '}>{studentFullName ? studentFullName : 'Не добавлено'}</FieldLabel>
         <FieldLabel title={'Куратор - '}>{curatorFullName ? curatorFullName : 'Не добавлено'}</FieldLabel>
         <FieldLabel title={'Приказ - '}>{orderNumber ? orderNumber : 'Не добавлено'}</FieldLabel>
-        <FieldLabel title={'Характеристика: '}>
-          {studentCharacteristics ? <Button icon={<DownloadOutlined />} /> : <Text>{'Не добавлено'}</Text>}
+        <FieldLabel title={'Характеристика - '}>
+          {studentCharacteristics ? studentCharacteristics : 'Не добавлено'}
         </FieldLabel>
         {!(diaryType === DiaryTypeEnum.DEFAULT) && planTable && (
           <FieldLabel title={'Планирование работы:'}>{planTable}</FieldLabel>
         )}
         <FieldLabel title={'Таблица с здачами:'}>
-          {taskReportTable ? <Button icon={<DownloadOutlined />} /> : <TaskReportUploading diaryId={id} />}
+          {taskReportTable ? (
+            <>
+              <Tag color={'green'}>{'Загружено'}</Tag>
+              <TaskReportUploading
+                title={'Изменить'}
+                diaryId={id}
+              />
+            </>
+          ) : (
+            <TaskReportUploading
+              title={'Загрузить'}
+              diaryId={id}
+            />
+          )}
         </FieldLabel>
       </Flex>
     </Card>

@@ -117,7 +117,7 @@ export const Startup = () => {
                   </Form.Item>
                   <Button
                     type={'default'}
-                    style={{ backgroundColor: 'orange', color: 'white' }}
+                    style={{ backgroundColor: 'red', color: 'white' }}
                     icon={<MinusCircleOutlined size={100} />}
                     onClick={() => {
                       onDeleteCompany(name)

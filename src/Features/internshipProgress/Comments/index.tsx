@@ -5,14 +5,13 @@ import TextArea from 'antd/es/input/TextArea'
 import { CommentItem } from '../../../entities/ui/CommentItem'
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 import { CommentOutlined } from '@ant-design/icons'
-
-type messageCredentials = { value: string; id: string }
+import { CommentCredentials } from '../../../shared/types/comment/CommentCredentials.ts'
 
 interface CommentsModalType {
   comments: CommentType[]
   title: string
   id: string
-  sendMessageCallback: (data: messageCredentials) => void
+  sendMessageCallback: (data: CommentCredentials) => void
 }
 
 export const CommentsModal = ({ comments, title, id, sendMessageCallback }: CommentsModalType) => {
@@ -33,7 +32,7 @@ export const CommentsModal = ({ comments, title, id, sendMessageCallback }: Comm
   }
 
   const handleSendComment = () => {
-    sendMessageCallback({ value: value, id: id })
+    sendMessageCallback({ text: value, senderId: id })
     setValue('')
   }
 

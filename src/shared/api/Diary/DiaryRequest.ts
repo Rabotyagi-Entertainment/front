@@ -87,5 +87,6 @@ export const {
   useLazyGetDiariesListQuery,
   useLeaveCommentDiaryMutation,
   useGetMyDiaryFileQuery,
+  useLazyGetMyDiaryFileQuery,
   useLoadReportMutation,
 } = diaryApi
