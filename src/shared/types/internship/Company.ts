@@ -1,10 +1,10 @@
 import { CommentType } from './Comment.ts'
-import { Index } from '../internshipProgress'
+import { InternshipProgressEnum } from '../internshipProgress'
 
 export interface Company {
   studentId: string
   companyName: string
-  status: Index
+  status: InternshipProgressEnum
   internshipProgressId: string
   comments: CommentType[]
 }
