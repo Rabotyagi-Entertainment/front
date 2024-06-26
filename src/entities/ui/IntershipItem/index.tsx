@@ -1,6 +1,7 @@
-import { Table, TableProps } from 'antd'
+import { Button, Table, TableProps } from 'antd'
 import { GetStudentInternshipResponse } from '../../../shared/api/Internship/InternshipDataSource.ts'
-import { NavLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { ExportOutlined } from '@ant-design/icons'
 
 interface InternshipItemProps {
   companies: GetStudentInternshipResponse
@@ -20,6 +21,7 @@ const createDataSource = (dataSource: GetStudentInternshipResponse) => {
 }
 
 export const InternshipItem = ({ companies }: InternshipItemProps) => {
+  const navigate = useNavigate()
   const columns: TableProps['columns'] = [
     {
       title: 'Компания',
@@ -41,7 +43,15 @@ export const InternshipItem = ({ companies }: InternshipItemProps) => {
       dataIndex: 'diaries',
       key: 'diaries',
       render: (_, record) => {
-        return <NavLink to={`/student/diary/${record.internshipId}`}>{'Дневники'}</NavLink>
+        return (
+          <Button
+            ghost
+            onClick={() => navigate(`/student/diary/${record.internshipId}`)}
+            icon={<ExportOutlined />}
+          >
+            {'Дневники'}
+          </Button>
+        )
       },
     },
   ]
@@ -51,6 +61,7 @@ export const InternshipItem = ({ companies }: InternshipItemProps) => {
       scroll={{ x: 300 }}
       dataSource={createDataSource(companies!)}
       columns={columns}
+      pagination={false}
     />
   )
 }
