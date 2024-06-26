@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 import { RouteType } from '../../../app/routes/RouteType.ts'
 import { ProfileResponse } from '../../../shared/api/Auth/AuthDataSource.ts'
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
-import { MenuOutlined } from '@ant-design/icons'
+import { MenuOutlined, LogoutOutlined } from '@ant-design/icons'
 import { BrbModal } from '../../../Features'
 
 const { Title } = Typography
@@ -31,10 +31,12 @@ const studentMenu = (name: string): MenuProps['items'] => [
     key: '3',
     label: (
       <Popover
+        trigger={'hover'}
         content={
           <Button
+            icon={<LogoutOutlined />}
             onClick={logoutFunction}
-            style={{ backgroundColor: 'red' }}
+            style={{ backgroundColor: 'red', color: 'white' }}
           >
             {'Выйти'}
           </Button>
@@ -59,6 +61,7 @@ const adminMenu = (name: string): MenuProps['items'] => [
     key: '3',
     label: (
       <Popover
+        trigger={'hover'}
         content={
           <Button
             onClick={logoutFunction}
@@ -123,12 +126,19 @@ export const Navbar = ({ profile }: NavbarProps) => {
           </Dropdown>
         )}
         {breakPoint.lg && profile && (
-          <Title
-            style={{ lineHeight: 'normal', marginTop: 0, marginBottom: 0 }}
-            level={5}
+          <Popover
+            trigger={'hover'}
+            content={
+              <Button
+                onClick={logoutFunction}
+                style={{ backgroundColor: 'red' }}
+              >
+                {'Выйти'}
+              </Button>
+            }
           >
-            {profile!.fullName}
-          </Title>
+            <NavLink to={'#'}>{profile!.fullName}</NavLink>
+          </Popover>
         )}
       </Flex>
     </Layout>
