@@ -6,10 +6,13 @@ import { ProfileResponse } from '../../../shared/api/Auth/AuthDataSource.ts'
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 import { MenuOutlined, LogoutOutlined } from '@ant-design/icons'
 import { BrbModal } from '../../../Features'
+import './index.css'
 
-const { Title } = Typography
+const { Title, Text } = Typography
 
-const logoutFunction = () => {
+const logoutFunction = (e: any) => {
+  e.preventDefault()
+  e.stopPropagation()
   localStorage.removeItem('userToken')
   window.location.reload()
 }
@@ -21,29 +24,27 @@ interface NavbarProps {
 const studentMenu = (name: string): MenuProps['items'] => [
   {
     key: '1',
-    label: <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'Собеседования'}</NavLink>,
+    label: <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'СОБЕСЕДОВАНИЯ'}</NavLink>,
   },
   {
     key: '2',
-    label: <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'Стажировки'}</NavLink>,
+    label: <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'СТАЖИРОВКИ'}</NavLink>,
   },
   {
     key: '3',
     label: (
-      <Popover
-        trigger={'hover'}
-        content={
-          <Button
-            icon={<LogoutOutlined />}
-            onClick={logoutFunction}
-            style={{ backgroundColor: 'red', color: 'white' }}
-          >
-            {'Выйти'}
-          </Button>
-        }
+      <Flex
+        gap={'0.5rem'}
+        align={'center'}
       >
-        <NavLink to={'#'}>{name}</NavLink>
-      </Popover>
+        <Text style={{ backgroundColor: '#E0E7FF', borderRadius: '0.5rem', padding: '0.5rem' }}>{name}</Text>
+        <Button
+          danger
+          onClick={logoutFunction}
+        >
+          <LogoutOutlined />
+        </Button>
+      </Flex>
     ),
   },
 ]
@@ -51,7 +52,7 @@ const studentMenu = (name: string): MenuProps['items'] => [
 const adminMenu = (name: string): MenuProps['items'] => [
   {
     key: '1',
-    label: <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>,
+    label: <NavLink to={RouteType.ADMIN_LISTS}>{'СПИСКИ'}</NavLink>,
   },
   {
     key: '2',
@@ -61,11 +62,11 @@ const adminMenu = (name: string): MenuProps['items'] => [
     key: '3',
     label: (
       <Popover
-        trigger={'hover'}
+        trigger={'click'}
         content={
           <Button
+            danger
             onClick={logoutFunction}
-            style={{ backgroundColor: 'red' }}
           >
             {'Выйти'}
           </Button>
@@ -92,7 +93,7 @@ export const Navbar = ({ profile }: NavbarProps) => {
           style={{ lineHeight: 'normal', marginTop: 0, marginBottom: 0 }}
           level={4}
         >
-          Система стажировок
+          СИСТЕМА СТАЖИРОВОК
         </Title>
         {breakPoint.lg ? (
           <Flex
@@ -101,13 +102,13 @@ export const Navbar = ({ profile }: NavbarProps) => {
           >
             {profile! && profile.roles.includes(RolesEnum.ADMIN) ? (
               <>
-                <NavLink to={RouteType.ADMIN_LISTS}>{'Списки'}</NavLink>
+                <NavLink to={RouteType.ADMIN_LISTS}>{'СПИСКИ'}</NavLink>
                 <BrbModal />
               </>
             ) : (
               <>
-                <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'Собеседования'}</NavLink>
-                <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'Стажировки'}</NavLink>
+                <NavLink to={RouteType.STUDENT_INTERNSHIP_PROGRESS}>{'СОБЕСЕДОВАНИЯ'}</NavLink>
+                <NavLink to={RouteType.STUDENT_INTERNSHIP}>{'СТАЖИРОВКИ'}</NavLink>
               </>
             )}
           </Flex>
@@ -130,8 +131,8 @@ export const Navbar = ({ profile }: NavbarProps) => {
             trigger={'hover'}
             content={
               <Button
+                danger
                 onClick={logoutFunction}
-                style={{ backgroundColor: 'red' }}
               >
                 {'Выйти'}
               </Button>

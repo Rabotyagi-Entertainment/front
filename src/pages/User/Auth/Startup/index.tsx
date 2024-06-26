@@ -1,5 +1,5 @@
 import { Button, Flex, Form, Input, InputNumber, Layout, Select, Typography } from 'antd'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { DeleteOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { useGetCompaniesQuery } from '../../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 import { GetCompaniesResponse } from '../../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
 import { useAddCompanyMutation, useRemoveCompanyMutation } from '../../../../shared'
@@ -67,6 +67,7 @@ export const Startup = () => {
       <Title>Начало</Title>
       <Form
         form={form}
+        layout={'vertical'}
         style={{ display: 'flex', flexDirection: 'column' }}
         name='dynamic_form_internship_startup'
         initialValues={{ companies: [] }}
@@ -77,11 +78,12 @@ export const Startup = () => {
               {fields.map(({ key, name, ...restField }) => (
                 <Flex
                   key={key}
+                  gap={'1rem'}
                   vertical={breakPoint.xs}
                   align={breakPoint.xs ? 'start' : 'center'}
                   style={{
                     padding: '1rem 0.5rem',
-                    border: '1px solid gray',
+                    backgroundColor: 'white',
                     borderRadius: '0.5rem',
                     marginBottom: '0.5rem',
                   }}
@@ -116,15 +118,13 @@ export const Startup = () => {
                     <Input />
                   </Form.Item>
                   <Button
-                    type={'default'}
-                    style={{ backgroundColor: 'red', color: 'white' }}
-                    icon={<MinusCircleOutlined size={100} />}
+                    danger
                     onClick={() => {
                       onDeleteCompany(name)
                       remove(name)
                     }}
                   >
-                    {'Удалить'}
+                    <DeleteOutlined />
                   </Button>
                 </Flex>
               ))}
@@ -150,6 +150,7 @@ export const Startup = () => {
             type='primary'
             onClick={onFinish}
             disabled={!isCanSkip}
+            block
           >
             Подтвердить
           </Button>
