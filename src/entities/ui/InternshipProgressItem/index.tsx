@@ -110,6 +110,7 @@ export const InternshipProgressItem = ({
       scroll={{ x: 300 }}
       dataSource={createDataSource(dataSource)}
       columns={columns}
+      pagination={false}
     />
   )
 }
