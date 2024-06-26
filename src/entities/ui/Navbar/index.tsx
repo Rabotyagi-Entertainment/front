@@ -1,4 +1,4 @@
-import { Button, Dropdown, Flex, Layout, MenuProps, Typography } from 'antd'
+import { Button, Dropdown, Flex, Layout, MenuProps, Popover, Typography } from 'antd'
 import { RolesEnum } from '../../../shared'
 import { NavLink } from 'react-router-dom'
 import { RouteType } from '../../../app/routes/RouteType.ts'
@@ -8,6 +8,11 @@ import { MenuOutlined } from '@ant-design/icons'
 import { BrbModal } from '../../../Features'
 
 const { Title } = Typography
+
+const logoutFunction = () => {
+  localStorage.removeItem('userToken')
+  window.location.reload()
+}
 
 interface NavbarProps {
   profile: ProfileResponse | undefined
@@ -24,7 +29,20 @@ const studentMenu = (name: string): MenuProps['items'] => [
   },
   {
     key: '3',
-    label: <NavLink to={'#'}>{name}</NavLink>,
+    label: (
+      <Popover
+        content={
+          <Button
+            onClick={logoutFunction}
+            style={{ backgroundColor: 'red' }}
+          >
+            {'Выйти'}
+          </Button>
+        }
+      >
+        <NavLink to={'#'}>{name}</NavLink>
+      </Popover>
+    ),
   },
 ]
 
@@ -39,7 +57,20 @@ const adminMenu = (name: string): MenuProps['items'] => [
   },
   {
     key: '3',
-    label: <NavLink to={'#'}>{name}</NavLink>,
+    label: (
+      <Popover
+        content={
+          <Button
+            onClick={logoutFunction}
+            style={{ backgroundColor: 'red' }}
+          >
+            {'Выйти'}
+          </Button>
+        }
+      >
+        <NavLink to={'#'}>{name}</NavLink>
+      </Popover>
+    ),
   },
 ]
 

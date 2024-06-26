@@ -2,7 +2,7 @@ import { Button, Flex, Form, Input, InputNumber, Layout, Select, Typography } fr
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { useGetCompaniesQuery } from '../../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 import { GetCompaniesResponse } from '../../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
-import { useAddCompanyMutation, useRemoveCompanyMutation } from '../../../../shared/api/Internship/InternshipRequest.ts'
+import { useAddCompanyMutation, useRemoveCompanyMutation } from '../../../../shared'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'antd/es/form/Form'
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
