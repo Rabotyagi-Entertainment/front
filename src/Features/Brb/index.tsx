@@ -35,6 +35,7 @@ export const BrbModal = () => {
           content: response.error.data.Message,
         })
       }
+      setShow(false)
     })
   }
 

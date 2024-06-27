@@ -12,6 +12,7 @@ import {
 
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 import { PlusOutlined } from '@ant-design/icons'
+import { useLocation } from 'react-router-dom'
 
 const { Title } = Typography
 
@@ -33,10 +34,11 @@ const selectedCompanies = (data: InternshipProgressResponse): InternshipCompanyT
 export const InternshipProgressStudent = () => {
   const [trigger, { data, isLoading }] = useLazyGetStudentInternshipProgressQuery({})
   const breakPoint = useBreakpoint()
+  const location = useLocation()
 
   useEffect(() => {
     trigger({})
-  }, [])
+  }, [location])
 
   if (isLoading) {
     return <Spin />
