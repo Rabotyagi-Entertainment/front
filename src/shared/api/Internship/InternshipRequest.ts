@@ -2,8 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
   AddCompanyUserPayload,
   AddCompanyUserResponse,
-  CreateCompanyPayload,
-  CreateCompanyResponse,
   DiaryProgressStatusPayload,
   DiaryProgressStatusResponse,
   GetStudentInternshipPayload,
@@ -50,13 +48,6 @@ export const internshipApi = createApi({
       query: ({ companyId }) => ({
         url: `company/${companyId}`,
         method: 'DELETE',
-      }),
-    }),
-    CreateCompany: builder.mutation<CreateCompanyResponse, CreateCompanyPayload>({
-      query: ({ name }) => ({
-        url: `company/create`,
-        method: 'POST',
-        body: name,
       }),
     }),
     ChangeStatus: builder.mutation<SetCompanyStatusResponse, SetCompanyStatusPayload>({
@@ -115,7 +106,6 @@ export const internshipApi = createApi({
 export const {
   useAddCompanyMutation,
   useChangeStatusMutation,
-  useCreateCompanyMutation,
   useSetNewStatusMutation,
   useSetNewStatusDiaryMutation,
   useUpdateStatusInternshipMutation,

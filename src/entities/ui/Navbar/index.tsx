@@ -61,19 +61,18 @@ const adminMenu = (name: string): MenuProps['items'] => [
   {
     key: '3',
     label: (
-      <Popover
-        trigger={'click'}
-        content={
-          <Button
-            danger
-            onClick={logoutFunction}
-          >
-            {'Выйти'}
-          </Button>
-        }
+      <Flex
+        gap={'0.5rem'}
+        align={'center'}
       >
-        <NavLink to={'#'}>{name}</NavLink>
-      </Popover>
+        <Text style={{ backgroundColor: '#E0E7FF', borderRadius: '0.5rem', padding: '0.5rem' }}>{name}</Text>
+        <Button
+          danger
+          onClick={logoutFunction}
+        >
+          <LogoutOutlined />
+        </Button>
+      </Flex>
     ),
   },
 ]
@@ -128,7 +127,6 @@ export const Navbar = ({ profile }: NavbarProps) => {
         )}
         {breakPoint.lg && profile && (
           <Popover
-            trigger={'hover'}
             content={
               <Button
                 danger
@@ -138,7 +136,7 @@ export const Navbar = ({ profile }: NavbarProps) => {
               </Button>
             }
           >
-            <NavLink to={'#'}>{profile!.fullName}</NavLink>
+            <Text>{profile!.fullName}</Text>
           </Popover>
         )}
       </Flex>

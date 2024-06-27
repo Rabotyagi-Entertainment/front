@@ -9,6 +9,7 @@ import { GetStudentsListSearchableResponse } from '../../../shared/api/internshi
 import { baseUrl, CurrentCompanyType, InternshipCompanyType } from '../../../shared'
 import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
 import { UploadingModal } from '../../../Features'
+import { AddCompany } from '../../../Features/AddCompany'
 
 type DataType = {
   userId: string
@@ -173,13 +174,14 @@ const Lists = () => {
   return (
     <>
       <Layout>
-        <Flex>
+        <Flex gap={'1rem'}>
           <UploadingModal
             info={'Формат списков: | ФИО | Группа | Номер курса |'}
             title={'Загрузить список'}
             url={`${baseUrl}api/auth/students/table`}
             icon={<UploadOutlined />}
           />
+          <AddCompany />
         </Flex>
         <Table
           pagination={false}

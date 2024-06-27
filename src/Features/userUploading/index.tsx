@@ -93,7 +93,7 @@ export const UploadingModal = ({
             fileList={fileList}
             onChange={handleChange}
           >
-            <Button icon={<UploadOutlined />}>{'Файл .xls'}</Button>
+            <Button icon={<UploadOutlined />}>{'Файл .xlsx'}</Button>
           </Upload>
           {info && (
             <Tooltip
