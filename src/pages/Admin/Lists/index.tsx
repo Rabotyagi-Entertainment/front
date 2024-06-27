@@ -10,6 +10,7 @@ import { baseUrl, CurrentCompanyType, InternshipCompanyType } from '../../../sha
 import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
 import { UploadingModal } from '../../../Features'
 import { AddCompany } from '../../../Features/AddCompany'
+import { DownloadDiariesCourseList } from '../../../Features/diary/DownloadDiariesCourseList'
 
 type DataType = {
   userId: string
@@ -182,6 +183,7 @@ const Lists = () => {
             icon={<UploadOutlined />}
           />
           <AddCompany />
+          <DownloadDiariesCourseList />
         </Flex>
         <Table
           pagination={false}

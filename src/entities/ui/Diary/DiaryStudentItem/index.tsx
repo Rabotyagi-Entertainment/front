@@ -1,4 +1,4 @@
-import { Card, Flex, Tag, Typography } from 'antd'
+import { Button, Card, Flex, notification, Tag, Typography } from 'antd'
 import {
   UserDiary,
   DiaryTypeEnum,
@@ -6,11 +6,14 @@ import {
   baseUrl,
   MessageCredential,
   useLeaveCommentDiaryMutation,
+  NotificationType,
+  useLazyGetMyDiaryFileQuery,
 } from '../../../../shared'
 import { DiaryStatusMapper, WorkModeMapper } from '../../../../shared/library/utils/utils.ts'
 import { CommentsModal, DownloadButton, EditInformation } from '../../../../Features'
 import { TaskReportUploading } from '../../TaskReportUploading'
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
+import { CloseCircleOutlined, DownloadOutlined, InfoCircleOutlined } from '@ant-design/icons'
 
 interface DiaryListItemProps {
   item: UserDiary
@@ -37,7 +40,40 @@ export const DiaryListItem = ({
   refetchCallback,
 }: DiaryListItemProps) => {
   const [trigger] = useLeaveCommentDiaryMutation()
+  const [QuerryTrigger] = useLazyGetMyDiaryFileQuery()
   const breakPoint = useBreakpoint()
+  const [api, contextHolder] = notification.useNotification()
+
+  const openNotification = ({ type, message, content }: NotificationType) => {
+    api.open({
+      message: message,
+      description: content,
+      placement: 'top',
+      type: 'info',
+      icon:
+        type === 'error' ? (
+          <CloseCircleOutlined style={{ color: 'red' }} />
+        ) : (
+          <InfoCircleOutlined style={{ color: 'blue' }} />
+        ),
+    })
+  }
+
+  const handleDownload = () => {
+    QuerryTrigger({ diaryId: id }).then(response => {
+      if (!response.error) {
+        openNotification({ type: 'success', message: `Файл придёт в телеграм бот`, content: '' })
+      } else {
+        openNotification({
+          type: 'error',
+          // @ts-ignore
+          message: `Ошибка - ${response.error.status}`,
+          // @ts-ignore
+          content: response.error.data.Message,
+        })
+      }
+    })
+  }
 
   const handleSendComments = ({ text }: MessageCredential) => {
     trigger({ diaryId: id, text: text }).then(() => refetchCallback())
@@ -54,6 +90,7 @@ export const DiaryListItem = ({
           vertical={breakPoint.xs}
           justify={'space-between'}
         >
+          {contextHolder}
           <Flex
             vertical={breakPoint.xs}
             gap={'1rem'}
@@ -94,11 +131,20 @@ export const DiaryListItem = ({
                 />
               )}
             </EditInformation>
-            <DownloadButton
-              iconInner={!breakPoint.sm}
-              link={`${baseUrl}diary/${id}`}
-              title={breakPoint.sm ? 'Скачать файл' : ''}
-            />
+            {sessionStorage.getItem('telegramView') !== '' ? (
+              <Button
+                type={'primary'}
+                onClick={handleDownload}
+              >
+                <DownloadOutlined />
+              </Button>
+            ) : (
+              <DownloadButton
+                iconInner={!breakPoint.sm}
+                link={`${baseUrl}diary/${id}`}
+                title={breakPoint.sm ? 'Скачать файл' : ''}
+              />
+            )}
           </Flex>
         </Flex>
       }

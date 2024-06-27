@@ -40,7 +40,7 @@ export const diaryApi = createApi({
         `list?${userId ? `userId=${userId}` : ''}&${internshipId ? `internshipId=${internshipId}` : ''}`,
     }),
     GetMyDiaryFile: builder.query<GetMyDiaryFileResponse, GetMyDiaryFilePayload>({
-      query: ({ diaryId }) => `${diaryId}`,
+      query: ({ diaryId }) => `${diaryId}/tg`,
     }),
     EditGeneralInfo: builder.mutation<EditDiaryGeneralInformationResponse, EditDiaryGeneralInformationPayload>({
       query: ({ diaryId, payload }) => ({
@@ -94,7 +94,6 @@ export const {
   useGetDiariesListQuery,
   useLazyGetDiariesListQuery,
   useLeaveCommentDiaryMutation,
-  useGetMyDiaryFileQuery,
   useLazyGetMyDiaryFileQuery,
   useLoadReportMutation,
   useDeleteDiaryMutation,

@@ -54,6 +54,13 @@ export const Router = () => {
     ? jwtDecode(isAuth)
     : { 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role': RolesEnum.USER }
 
+  try {
+    // @ts-ignore
+    sessionStorage.setItem('telegramView', window.Telegram.WebApp.initDataUnsafe.user.username)
+  } catch (error) {
+    sessionStorage.setItem('telegramView', '')
+  }
+
   const customRouter = useRoutes(
     role['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === RolesEnum.ADMIN
       ? createAdminRoutes(!!isAuth)

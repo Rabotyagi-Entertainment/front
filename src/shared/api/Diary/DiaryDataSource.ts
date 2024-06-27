@@ -6,7 +6,7 @@ export type GetMyDiaryResponse = UserDiary[]
 export interface GetMyDiaryFilePayload {
   diaryId: string
 }
-export type GetMyDiaryFileResponse = string
+export interface GetMyDiaryFileResponse {}
 
 export interface GetDiaryListPayload {
   userId?: string

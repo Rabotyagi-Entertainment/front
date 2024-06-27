@@ -5,11 +5,18 @@ interface DownloadDiaryProps {
   title?: string
   link: string
   iconInner?: boolean
+  disabled?: boolean
 }
 
-export const DownloadButton = ({ link, iconInner = false, title = 'Скачать' }: DownloadDiaryProps) => {
+export const DownloadButton = ({
+  link,
+  disabled = false,
+  iconInner = false,
+  title = 'Скачать',
+}: DownloadDiaryProps) => {
   return (
     <Button
+      disabled={disabled}
       type={'primary'}
       icon={!iconInner && <DownloadOutlined />}
     >
