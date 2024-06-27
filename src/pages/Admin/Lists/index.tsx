@@ -1,26 +1,14 @@
-import {
-  Button,
-  Empty,
-  Flex,
-  Input,
-  InputRef,
-  Layout,
-  Space,
-  Table,
-  TableColumnType,
-  TableProps,
-  Tag,
-  Tooltip,
-} from 'antd'
+import { Button, Flex, Input, InputRef, Layout, Space, Table, TableColumnType, TableProps, Tag, Tooltip } from 'antd'
 import { useLazyGetStudentsParametersQuery } from '../../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
 import { useEffect, useRef } from 'react'
 import { useForm } from 'antd/es/form/Form'
 import { NavLink } from 'react-router-dom'
-import { CodeOutlined, ExportOutlined, SearchOutlined } from '@ant-design/icons'
+import { CodeOutlined, ExportOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons'
 import { RouteType } from '../../../app/routes/RouteType.ts'
 import { GetStudentsListSearchableResponse } from '../../../shared/api/internshipAdmin/InternshipAdminDataSource.ts'
-import { CurrentCompanyType, InternshipCompanyType } from '../../../shared'
+import { baseUrl, CurrentCompanyType, InternshipCompanyType } from '../../../shared'
 import { statusInternshipProgressMapper } from '../../../shared/library/utils/utils.ts'
+import { UploadingModal } from '../../../Features'
 
 type DataType = {
   userId: string
@@ -39,7 +27,7 @@ const createDataSource = (dataSource: GetStudentsListSearchableResponse): DataTy
       search: item.name,
       group: item.group,
       company: item.companies,
-      currentCompany: null,
+      currentCompany: item.currentCompany,
     }
   })
 }
@@ -54,8 +42,9 @@ const Lists = () => {
   }, [])
 
   const handleSearch = ({ key, value }: { value: string[]; key: string }) => {
+    const searchTextField = value[0] ? value[0]!.toLowerCase() : null
     // @ts-ignore
-    trigger({ [key]: value[0].toLowerCase() })
+    trigger({ [key]: searchTextField })
   }
 
   const getColumnSearchProps = (dataIndex: DataIndex): TableColumnType<DataType> => ({
@@ -184,16 +173,20 @@ const Lists = () => {
   return (
     <>
       <Layout>
-        {data! && data.length > 0 ? (
-          <Table
-            pagination={false}
-            loading={isLoading}
-            columns={columns}
-            dataSource={createDataSource(data!)}
+        <Flex>
+          <UploadingModal
+            info={'Формат списков: | ФИО | Группа | Номер курса |'}
+            title={'Загрузить список'}
+            url={`${baseUrl}api/auth/students/table`}
+            icon={<UploadOutlined />}
           />
-        ) : (
-          <Empty description={'Нет студентов'} />
-        )}
+        </Flex>
+        <Table
+          pagination={false}
+          loading={isLoading}
+          columns={columns}
+          dataSource={data ? createDataSource(data!) : []}
+        />
       </Layout>
     </>
   )

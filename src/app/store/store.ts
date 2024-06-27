@@ -1,10 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import { authApi } from '../../shared/api/Auth/AuthRequest.ts'
+import { authApi, internshipApi, diaryApi, DiaryAdmin } from '../../shared'
 import { internshipAdminApi } from '../../shared/api/internshipAdmin/InternshipAdminRequest.ts'
-import { internshipApi } from '../../shared/api/Internship/InternshipRequest.ts'
-import { diaryApi } from '../../shared/api/Diary/DiaryRequest.ts'
-import { DiaryAdmin } from '../../shared/api/DiaryAdmin/DiaryAdminRequest.ts'
 
 export const store = configureStore({
   reducer: {

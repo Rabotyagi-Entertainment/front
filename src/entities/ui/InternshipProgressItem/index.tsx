@@ -1,8 +1,7 @@
 import { Table, TableProps } from 'antd'
 import { GetStudentInternshipProgressResponse } from '../../../shared/api/Internship/InternshipDataSource.ts'
-import { CommentsModal, StatusModal } from '../../../Features'
+import { CommentsModal, StatusModal, DeleteInternshipProgressModal } from '../../../Features'
 import { useLeaveCommentUserMutation, MessageCredential } from '../../../shared'
-import { DeleteModal } from '../../../Features'
 
 interface InternshipProgressItemProps {
   dataSource: GetStudentInternshipProgressResponse | []
@@ -60,6 +59,7 @@ export const InternshipProgressItem = ({
       key: 'comments',
       render: (_, record) => (
         <CommentsModal
+          refetchCallback={refetchCallback}
           sendMessageCallback={handleSendMessage}
           id={record.companyId}
           comments={record.comments}
@@ -93,7 +93,7 @@ export const InternshipProgressItem = ({
         return (
           <>
             {acceptedCompany !== record.companyId && (
-              <DeleteModal
+              <DeleteInternshipProgressModal
                 refetchCallback={refetchCallback}
                 companyId={record.companyId}
               />

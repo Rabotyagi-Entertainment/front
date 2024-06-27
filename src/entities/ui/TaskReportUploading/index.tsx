@@ -1,6 +1,6 @@
-import { UploadingModal } from '../../../Features/userUploading'
+import { UploadingModal } from '../../../Features'
 import { UploadOutlined } from '@ant-design/icons'
-import { baseUrl } from '../../../shared/api/static/authConfig.ts'
+import { baseUrl } from '../../../shared'
 
 interface TaskReportUploadingProps {
   diaryId: string
@@ -10,6 +10,7 @@ interface TaskReportUploadingProps {
 export const TaskReportUploading = ({ title, diaryId }: TaskReportUploadingProps) => {
   return (
     <UploadingModal
+      info={'Формат задач: Дата начала | Дата окончания | Название'}
       icon={<UploadOutlined />}
       buttonStyle={'default'}
       title={title}

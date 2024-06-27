@@ -10,6 +10,7 @@ import {
 import { DiaryStatusMapper, WorkModeMapper } from '../../../../shared/library/utils/utils.ts'
 import { CommentsModal, DownloadButton, EditInformation } from '../../../../Features'
 import { TaskReportUploading } from '../../TaskReportUploading'
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 
 interface DiaryListItemProps {
   item: UserDiary
@@ -36,6 +37,7 @@ export const DiaryListItem = ({
   refetchCallback,
 }: DiaryListItemProps) => {
   const [trigger] = useLeaveCommentDiaryMutation()
+  const breakPoint = useBreakpoint()
 
   const handleSendComments = ({ text }: MessageCredential) => {
     trigger({ diaryId: id, text: text }).then(() => refetchCallback())
@@ -46,8 +48,14 @@ export const DiaryListItem = ({
     <Card
       key={id + 'inner'}
       title={
-        <span style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Flex
+          style={{ margin: '0.5rem 0' }}
+          gap={'0.5rem'}
+          vertical={breakPoint.xs}
+          justify={'space-between'}
+        >
           <Flex
+            vertical={breakPoint.xs}
             gap={'1rem'}
             align={'center'}
           >
@@ -57,10 +65,15 @@ export const DiaryListItem = ({
             >
               <Text style={{ color: 'white' }}>{DiaryStatusMapper[diaryState].text}</Text>
             </Tag>
-            <span>{`${WorkModeMapper[diaryType]} ${workName ? workName : ''} : ${year}`}</span>
+            <Text>{`${WorkModeMapper[diaryType]} ${workName ? workName : ''} : ${year}`}</Text>
           </Flex>
-          <Flex gap={'1rem'}>
+          <Flex
+            gap={'1rem'}
+            justify={'center'}
+            align={'center'}
+          >
             <CommentsModal
+              refetchCallback={refetchCallback}
               comments={comments}
               title={'Комментарии дневника'}
               id={id}
@@ -82,11 +95,12 @@ export const DiaryListItem = ({
               )}
             </EditInformation>
             <DownloadButton
+              iconInner={!breakPoint.sm}
               link={`${baseUrl}diary/${id}`}
-              title={'Скачать файл'}
+              title={breakPoint.sm ? 'Скачать файл' : ''}
             />
           </Flex>
-        </span>
+        </Flex>
       }
     >
       <Flex

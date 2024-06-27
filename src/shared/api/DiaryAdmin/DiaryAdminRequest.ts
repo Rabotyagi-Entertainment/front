@@ -31,7 +31,7 @@ export const DiaryAdmin = createApi({
     LeaveCommentAdmin: builder.mutation<LeaveCommentPracticeDiaryResponse, LeaveCommentPracticeDiaryPayload>({
       query: ({ diaryId, text }) => ({
         url: `${diaryId}/comment`,
-        text: text,
+        body: { text },
         method: 'POST',
       }),
     }),

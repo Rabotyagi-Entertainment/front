@@ -1,4 +1,5 @@
 export * from './ChangeStatusAdmin'
 export * from './CreateDiaryModal'
 export * from './DownloadDiary'
+export * from './DeleteDiaryModal'
 export * from './Editable'

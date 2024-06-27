@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Button, Modal, Select } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { DiaryTypeEnum } from '../../../shared/types/diary/DiaryTypeEnum.ts'
-import { useCreatePracticeDiaryMutation } from '../../../shared/api/Diary/DiaryRequest.ts'
+import { DiaryTypeEnum, useCreatePracticeDiaryMutation } from '../../../shared'
 import { WorkModeMapper } from '../../../shared/library/utils/utils.ts'
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint'
 
 interface CreateDiaryModalProps {
   internshipId: string
@@ -28,6 +28,7 @@ export const CreateDiaryModal = ({ internshipId, refetchCallback }: CreateDiaryM
   const [trigger] = useCreatePracticeDiaryMutation()
   const [value, setValue] = useState<DiaryTypeEnum>(DiaryTypeEnum.DEFAULT)
   const [show, setShow] = useState<boolean>(false)
+  const breakPoint = useBreakpoint()
 
   const showModal = () => {
     setShow(true)
@@ -53,10 +54,10 @@ export const CreateDiaryModal = ({ internshipId, refetchCallback }: CreateDiaryM
     <>
       <Button
         type={'primary'}
-        icon={<PlusOutlined />}
+        icon={!breakPoint.sm && <PlusOutlined />}
         onClick={showModal}
       >
-        {'Создать дневник'}
+        {breakPoint.sm ? 'Создать дневник' : ''}
       </Button>
       <Modal
         title='Создание дневника практики'
