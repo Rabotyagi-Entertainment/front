@@ -57,6 +57,7 @@ export const DiaryAdminListItem = ({
           />
           <Flex gap={'1rem'}>
             <CommentsModal
+              refetchCallback={refetchCallback}
               comments={comments}
               title={'Комментарии дневника'}
               id={id}

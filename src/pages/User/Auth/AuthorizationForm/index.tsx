@@ -1,8 +1,9 @@
-import { Button, Flex, Form, FormProps, Input, Select, Spin, Typography } from 'antd'
-import { useGetStudentsQuery, useRegisterMutation } from '../../../../shared/api/Auth/AuthRequest.ts'
+import { Button, Flex, Form, Input, notification, Select, Spin, Typography } from 'antd'
+import { NotificationType, useGetStudentsQuery, useRegisterMutation } from '../../../../shared'
 import { GetLoadedStudentsResponse, RegisterPayload } from '../../../../shared/api/Auth/AuthDataSource.ts'
 import { NavLink } from 'react-router-dom'
 import { RouteType } from '../../../../app/routes/RouteType.ts'
+import { CloseCircleOutlined } from '@ant-design/icons'
 
 type FieldType = RegisterPayload
 
@@ -25,19 +26,33 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
   const [authTrigger, { isLoading }] = useRegisterMutation()
   const { data, isFetching } = useGetStudentsQuery({})
 
+  const [api, contextHolder] = notification.useNotification()
+
+  const openNotification = ({ type, message, content }: NotificationType) => {
+    api.open({
+      message: message,
+      description: content,
+      placement: 'topRight',
+      type: type,
+      icon: <CloseCircleOutlined style={{ color: 'red' }} />,
+    })
+  }
+
   const onFinish = (values: FieldType) => {
     authTrigger({ ...values }).then(response => {
       if (response.error) {
-        alert(`Ошибка: ${response.error}`)
+        openNotification({
+          type: 'error',
+          // @ts-ignore
+          message: `Ошибка - ${response.error.status}`,
+          // @ts-ignore
+          content: response.error.data.Message,
+        })
       } else {
         localStorage.setItem('userToken', response.data.jwt)
         successCallback()
       }
     })
-  }
-
-  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = errorInfo => {
-    alert(`Ошибка: ${errorInfo}`)
   }
 
   if (isFetching) {
@@ -48,6 +63,7 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
   return (
     <>
+      {contextHolder}
       <Title style={{ textAlign: 'center' }}>{'Регистрация'}</Title>
       <Form
         layout={'vertical'}
@@ -55,7 +71,6 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
         name='register'
         initialValues={{ password: '', fullName: '', email: '', telegramUserName: '' }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
       >
         <Form.Item<FieldType>
           label='Пользователь'

@@ -45,7 +45,6 @@ export const InternshipItem = ({ companies }: InternshipItemProps) => {
       render: (_, record) => {
         return (
           <Button
-            ghost
             onClick={() => navigate(`/student/diary/${record.internshipId}`)}
             icon={<ExportOutlined />}
           >

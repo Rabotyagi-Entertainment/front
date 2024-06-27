@@ -30,12 +30,11 @@ const createDataSource = (dataSource: GetAdminStudentInternshipResponse) => {
 export const InternshipProgressAdmin = () => {
   const { id } = useParams()
 
+  const [trigger, { data, isLoading }] = useLazyGetStudentsAdminInternshipsQuery()
+  const [mutationTrigger] = useCommentMutation()
   useEffect(() => {
     trigger({ studentId: id! })
   }, [id])
-
-  const [trigger, { data, isLoading }] = useLazyGetStudentsAdminInternshipsQuery()
-  const [mutationTrigger] = useCommentMutation()
 
   const handleSendMessage = ({ text, senderId }: MessageCredential) => {
     mutationTrigger({ internshipProgressId: senderId, text: text }).then(response => {
@@ -83,6 +82,7 @@ export const InternshipProgressAdmin = () => {
       key: 'comments',
       render: (_, record) => (
         <CommentsModal
+          refetchCallback={() => trigger({ studentId: id! })}
           sendMessageCallback={handleSendMessage}
           id={record.key}
           comments={record.comments}

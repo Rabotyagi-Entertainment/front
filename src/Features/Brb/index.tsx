@@ -1,7 +1,7 @@
-import { Button, DatePicker, Form, Input, InputNumber, Modal } from 'antd'
-import { BellOutlined, MehOutlined } from '@ant-design/icons'
+import { Button, DatePicker, Form, Input, InputNumber, Modal, notification } from 'antd'
+import { BellOutlined, CloseCircleOutlined, MehOutlined } from '@ant-design/icons'
 import { useState } from 'react'
-import { useSendDeadlineMessageMutation } from '../../shared/api/Auth/AuthRequest.ts'
+import { NotificationType, useSendDeadlineMessageMutation } from '../../shared'
 import { useForm } from 'antd/es/form/Form'
 import { SendMessageDeadlinePayload } from '../../shared/api/Auth/AuthDataSource.ts'
 
@@ -12,9 +12,29 @@ export const BrbModal = () => {
   const [trigger] = useSendDeadlineMessageMutation()
   const [form] = useForm()
 
+  const [api, contextHolder] = notification.useNotification()
+
+  const openNotification = ({ type, message, content }: NotificationType) => {
+    api.open({
+      message: message,
+      description: content,
+      placement: 'topRight',
+      type: type,
+      icon: <CloseCircleOutlined style={{ color: 'red' }} />,
+    })
+  }
+
   const onFinish = () => {
     trigger(form.getFieldsValue()).then(response => {
-      alert(response)
+      if (response.error) {
+        openNotification({
+          type: 'error',
+          // @ts-ignore
+          message: `Ошибка - ${response.error.status}`,
+          // @ts-ignore
+          content: response.error.data.Message,
+        })
+      }
     })
   }
 
@@ -28,6 +48,7 @@ export const BrbModal = () => {
 
   return (
     <>
+      {contextHolder}
       <Button
         style={{ backgroundColor: 'red' }}
         type={'primary'}

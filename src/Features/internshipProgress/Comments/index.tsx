@@ -11,14 +11,16 @@ interface CommentsModalType {
   title: string
   id: string
   sendMessageCallback: (data: MessageCredential) => void
+  refetchCallback: () => void
 }
 
-export const CommentsModal = ({ comments, title, id, sendMessageCallback }: CommentsModalType) => {
+export const CommentsModal = ({ comments, title, id, sendMessageCallback, refetchCallback }: CommentsModalType) => {
   const breakPoint = useBreakpoint()
   const [value, setValue] = useState<string>('')
   const [show, setShow] = useState<boolean>(false)
 
   const showModal = () => {
+    refetchCallback()
     setShow(true)
   }
 

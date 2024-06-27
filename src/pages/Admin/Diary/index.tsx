@@ -1,10 +1,10 @@
 import { Collapse, CollapseProps, Empty, Layout, Typography } from 'antd'
 import { useParams } from 'react-router-dom'
-import { useLazyGetDiariesListQuery } from '../../../shared/api/Diary/DiaryRequest.ts'
+import { useLazyGetDiariesListQuery } from '../../../shared'
 import { useEffect } from 'react'
 import { GetDiaryListResponse } from '../../../shared/api/Diary/DiaryDataSource.ts'
 import { WorkModeMapper } from '../../../shared/library/utils/utils.ts'
-import { DiaryAdminListItem } from '../../../entities/ui/Diary/DiaryAdminItem'
+import { DiaryAdminListItem } from '../../../entities'
 
 const { Title } = Typography
 const DiaryAdmin = () => {

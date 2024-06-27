@@ -3,6 +3,8 @@ import { baseUrl } from '../static/authConfig.ts'
 import {
   CreateDiaryPayload,
   CreateDiaryResponse,
+  DeleteDiaryPayload,
+  DeleteDiaryResponse,
   EditDiaryAdditionalInformationPayload,
   EditDiaryAdditionalInformationResponse,
   EditDiaryGeneralInformationPayload,
@@ -76,6 +78,12 @@ export const diaryApi = createApi({
         body: { text: text },
       }),
     }),
+    DeleteDiary: builder.mutation<DeleteDiaryResponse, DeleteDiaryPayload>({
+      query: ({ diaryId }) => ({
+        url: `${diaryId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
@@ -89,4 +97,5 @@ export const {
   useGetMyDiaryFileQuery,
   useLazyGetMyDiaryFileQuery,
   useLoadReportMutation,
+  useDeleteDiaryMutation,
 } = diaryApi

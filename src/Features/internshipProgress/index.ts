@@ -1,4 +1,4 @@
 export * from './Comments'
 export * from './CreateModal'
-export * from './DeleteModal'
+export * from './DeleteInternshipProgressModal'
 export * from './StatusEdit'

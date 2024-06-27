@@ -1,6 +1,4 @@
-import { UserDiary } from '../../types/diary/UserDiary.ts'
-import { DiaryTypeEnum } from '../../types/diary/DiaryTypeEnum.ts'
-import { RolesEnum } from '../../types/user/RolesEnum.ts'
+import { UserDiary, DiaryTypeEnum, RolesEnum } from '../../types'
 
 export interface GetMyDiaryPayload {}
 export type GetMyDiaryResponse = UserDiary[]
@@ -59,3 +57,8 @@ export interface LeaveCommentResponse {
   author: string
   roleType: RolesEnum
 }
+
+export interface DeleteDiaryPayload {
+  diaryId: string
+}
+export interface DeleteDiaryResponse {}
