@@ -1,8 +1,8 @@
 import { Button, Card, Flex, Tag, Typography } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
 import { DiaryStatusMapper, WorkModeMapper } from '../../../../shared/library/utils/utils.ts'
-import { ChangeStatusAdmin, CommentsModal } from '../../../../Features'
-import { MessageCredential, UserDiary, FieldLabel, useLeaveCommentAdminMutation } from '../../../../shared'
+import { ChangeStatusAdmin, CommentsModal, DownloadButton } from '../../../../Features'
+import { MessageCredential, UserDiary, FieldLabel, useLeaveCommentAdminMutation, baseUrl } from '../../../../shared'
 
 interface DiaryListItemProps {
   item: UserDiary
@@ -64,6 +64,10 @@ export const DiaryAdminListItem = ({
               sendMessageCallback={handleSendComments}
             />
           </Flex>
+          <DownloadButton
+            link={`${baseUrl}diary/${id}`}
+            title={'Скачать файл'}
+          />
         </span>
       }
     >
