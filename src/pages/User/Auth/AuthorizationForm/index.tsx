@@ -25,6 +25,14 @@ const createOptions = (data: GetLoadedStudentsResponse): { value: string; label:
 export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) => {
   const [authTrigger, { isLoading }] = useRegisterMutation()
   const { data, isFetching } = useGetStudentsQuery({})
+  let telegramUsername: string = ''
+
+  try {
+    // @ts-ignore
+    telegramUsername = window.Telegram.WebApp.initDataUnsafe.user.username
+  } catch (error) {
+    console.log(error)
+  }
 
   const [api, contextHolder] = notification.useNotification()
 
@@ -69,7 +77,12 @@ export const AuthorizationForm = ({ successCallback }: AuthorizationFormProps) =
         layout={'vertical'}
         style={{ minWidth: 300, width: '100%' }}
         name='register'
-        initialValues={{ password: '', fullName: '', email: '', telegramUserName: '' }}
+        initialValues={{
+          password: '',
+          fullName: '',
+          email: '',
+          telegramUserName: telegramUsername,
+        }}
         onFinish={onFinish}
       >
         <Form.Item<FieldType>
